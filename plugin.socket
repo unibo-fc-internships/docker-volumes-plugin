@@ -1,0 +1,8 @@
+[Unit]
+Description=Your plugin
+
+[Socket]
+ListenStream=/run/docker/plugins/plugin.sock
+
+[Install]
+WantedBy=sockets.target
