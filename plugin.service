@@ -5,7 +5,8 @@ After=network.target plugin.socket
 Requires=plugin.socket docker.service
 
 [Service]
-ExecStart=/usr/lib/docker/your-plugin
+#ExecStart=/usr/lib/docker/your-plugin
+ExecStart=/home/anitvam/work/assegno/docker-volume-plugin/launcher.sh
 
 [Install]
 WantedBy=multi-user.target
