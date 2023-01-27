@@ -1,4 +1,19 @@
 {
-  "Name": "plugin",
-  "Addr": "https://example.com/docker/plugin"
+  "description": "my custom plugin to manage almaai nfs servers",
+  "documentation": "https://example.com/docker/plugin",
+  "workdir": "/project",
+  "entrypoint": [
+    "node",
+    "index.js"
+  ],
+  "interface": {
+    "socket": "plugin.sock",
+    "types": ["docker.volumedriver/1.0"]
+  },
+  "network": {
+    "type": "host"
+  },
+  "linux": {
+    "capabilities": ["CAP_SYS_ADMIN"]
+  }
 }

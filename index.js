@@ -45,6 +45,7 @@ app.post('/VolumeDriver.Capabilities', (req, res) => {
 
 
 const socket = '/run/docker/plugins/plugin.sock'
+//const socket = '8080'
 server.listen(socket, (req, res) => {
   console.log('Listening to ', socket)
 })
