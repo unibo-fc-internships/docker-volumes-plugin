@@ -9,21 +9,7 @@ const server = http.createServer(app);
 // Body parser
 app.use(express.json())
 
-// var directories = new Map([
-//     ['/mnt/data2/', 0],
-//     ['/mnt/data3/', 0],
-//     ['/mnt/data4/', 0],
-//     ['/mnt/data5/', 0],
-//     ['/mnt/data6/', 0],
-//     ['/mnt/data7/', 0],
-//     ['/mnt/data8/', 0],
-//     ['/mnt/data9/', 0],
-// ]);
-
-var directories = new Map([
-    ['/mnt/data2/', 0],
-    ['/mnt/data3/', 0],
-])
+const volumesDirectory = "/mnt/common-volume/"
 
 var volumes = new Map();
 
@@ -34,25 +20,16 @@ app.post('/Plugin.Activate', (req, res) => {
 app.post('/VolumeDriver.Create', (req, res) => {
     if (req.body === undefined){
         res.json({"Err": "Request is not correctly formatted"})
-    } else if (volumes.has(req.body.Name)) {
-        res.json({"Err": "Volume " + name + " already exists"})
+    } else if (volumes.includes(req.body.Name)) {
+        res.json({"Err": "Volume " + req.body.Name + " already exists"})
     } else {
-        const name = req.body.Name;
-        // Calculate directories occupation
-        directories.forEach((_ , folder) => {
-            console.log(execSync('du -s ' + folder))
-            const size = parseInt(execSync('du -s ' + folder + ' | cut -f1', { encoding: 'utf-8' }))
-            directories.set(folder, size)
-        })
-        console.log(directories)
-        const min = Math.min(...directories.values())
-        const s = [...directories.entries()].find(([_, v]) => v === min)[0]
-        console.log(s + name)
-        fs.mkdir(s + name, (err) => {
+        const name = req.body.Name
+        fs.mkdir(volumesDirectory + name, (err) => {
             if (err) {
               res.json({"Err": "Volume " + name + " cannot be created. " + err})
             } else {
-              res.send('OK')
+              volumes.push(name)
+              res.json({"Err": ""})
             }
         })
     }
@@ -67,7 +44,21 @@ app.post('/VolumeDriver.List', (req, res) => {
 })
 
 app.post('/VolumeDriver.Remove', (req, res) => {
-  res.send('Remove')
+    if (req.body === undefined){
+      res.json({"Err": "Request is not correctly formatted"})
+    } else if (!volumes.includes(req.body.Name)) {
+        res.json({"Err": "Volume " + req.body.Name + " doesn't exists"})
+    } else {
+        const name = req.body.Name
+        fs.rmdir(volumesDirectory + name, (err) => {
+            if (err) {
+              res.json({"Err": "Volume " + name + " cannot be deleted. " + err})
+            } else {
+              volumes.pop(name)
+              res.json({"Err": ""})
+            }
+        })
+    }
 })
 
 app.post('/VolumeDriver.Path', (req, res) => {
@@ -75,7 +66,21 @@ app.post('/VolumeDriver.Path', (req, res) => {
 })
 
 app.post('/VolumeDriver.Mount', (req, res) => {
-  res.send('Mount')
+  if (req.body === undefined){
+    res.json({"Err": "Request is not correctly formatted"})
+  } else if (!volumes.includes(req.body.Name)) {
+      res.json({"Err": "Volume " + req.body.Name + " doesn't exists"})
+  } else {
+      const name = req.body.Name
+      fs.rmdir(volumesDirectory + name, (err) => {
+          if (err) {
+            res.json({"Err": "Volume " + name + " cannot be deleted. " + err})
+          } else {
+            volumes.pop(name)
+            res.json({"Err": ""})
+          }
+      })
+  }
 })
 
 app.post('/VolumeDriver.Unmount', (req, res) => {

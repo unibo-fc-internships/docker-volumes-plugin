@@ -1,5 +1,5 @@
 {
-  "description": "my custom plugin to manage almaai nfs servers",
+  "description": "GlusterFS volume plugin for Docker",
   "documentation": "https://example.com/docker/plugin",
   "workdir": "/project",
   "entrypoint": [
