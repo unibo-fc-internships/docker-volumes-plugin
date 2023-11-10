@@ -1,18 +1,28 @@
 {
-  "description": "GlusterFS volume plugin for Docker",
+  "description": "Docker plugin for storing volumes on custom paths",
   "documentation": "https://example.com/docker/plugin",
-  "workdir": "/project",
+  "workdir": "/volumes-on-paths",
   "entrypoint": [
     "node",
     "index.js"
   ],
   "interface": {
-    "socket": "plugin.sock",
+    "socket": "volumes-on-paths.sock",
     "types": ["docker.volumedriver/1.0"]
   },
   "network": {
     "type": "host"
   },
+  "env": [
+    {
+      "description": "",
+      "name": "VOLUMES_PATHS",
+      "settable": [
+        "value"
+      ],
+      "value": "/mnt/data"
+    }
+  ],
   "linux": {
     "capabilities": ["CAP_SYS_ADMIN"]
   }
