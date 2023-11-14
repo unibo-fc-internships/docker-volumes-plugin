@@ -1,8 +1,7 @@
-FROM node:19
-
-COPY package*.json /volumes-on-paths/
-COPY index.js /volumes-on-paths/
-
-WORKDIR /volumes-on-paths
-
-ENTRYPOINT ["node", "index.js"]
+FROM python:latest
+ENV PLUGIN_NAME volumes-on-paths
+COPY *.py /$PLUGIN_NAME/
+COPY *.txt /$PLUGIN_NAME/
+WORKDIR /$PLUGIN_NAME
+RUN pip install -r requirements.txt
+ENTRYPOINT ["python", "-m", "flask", "--app", "plugin", "run", "--host=/run/docker/plugins/$PLUGIN_NAME.sock"]

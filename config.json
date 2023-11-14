@@ -3,27 +3,48 @@
   "documentation": "https://example.com/docker/plugin",
   "workdir": "/volumes-on-paths",
   "entrypoint": [
-    "node",
-    "index.js"
+    "python",
+    "-m",
+    "flask",
+    "--app",
+    "plugin",
+    "run",
+    "--host=/run/docker/plugins/$PLUGIN_NAME.sock"
   ],
   "interface": {
     "socket": "volumes-on-paths.sock",
-    "types": ["docker.volumedriver/1.0"]
+    "types": [
+      "docker.volumedriver/1.0"
+    ]
   },
   "network": {
-    "type": "host"
+    "type": "none"
   },
+  "mounts": [
+    {
+        "destination": "/mnt",
+        "source": "/mnt",
+        "type": "bind",
+        "options": [
+            "bind",
+            "rw"
+        ]
+    }
+  ],
+  "propagatedMount": "/var/logs/",
   "env": [
     {
       "description": "",
-      "name": "VOLUMES_PATHS",
+      "name": "USABLE_PATHS",
       "settable": [
         "value"
       ],
-      "value": "/mnt/data"
+      "value": "*"
     }
   ],
   "linux": {
-    "capabilities": ["CAP_SYS_ADMIN"]
+    "capabilities": [
+      "CAP_SYS_ADMIN"
+    ]
   }
 }
