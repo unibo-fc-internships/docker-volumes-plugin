@@ -2,6 +2,7 @@ import json
 from abc import ABC
 from enum import Enum
 from pathlib import Path
+from dataclasses import dataclass
 
 
 class paths(Enum):
@@ -27,7 +28,7 @@ class Message(ABC):
     def to_json(self):
         tmp = dict(self.__dict__)
         tmp = self._alter_json(tmp)
-        return json.dumps(self.__dict__)
+        return json.dumps(tmp)
     
     def _alter_json(self, json):
         return json
@@ -47,6 +48,11 @@ class Message(ABC):
     def _ensure_has_fields(self, *fields):
         for field in fields:
             assert hasattr(self, field), f"`{field}` field is missing"
+
+    @classmethod
+    def parse_json(cls, input):
+        dict = json.loads(input)
+        return cls(**dict)
 
 
 class Request(Message):
@@ -73,7 +79,7 @@ class VolumeCreateResponse(Response):
 class VolumeRemoveRequest(Request):
     def __init__(self, **args):
         super().__init__(**args)
-        self._ensure_has_fields("name", "opts")
+        self._ensure_has_fields("name")
 
 
 class VolumeRemoveResponse(Response):
@@ -90,7 +96,7 @@ class VolumeMountRequest(_NameIdRequest):
     pass
 
 
-class _MountPointResponse(Response):
+class _MountPointMessage(Message):
     def __init__(self, **args):
         super().__init__(**args)
         self._ensure_has_fields("mountpoint")
@@ -98,10 +104,23 @@ class _MountPointResponse(Response):
             self.mountpoint = Path(self.mountpoint)
 
     def _alter_json(self, json):
+        json = super()._alter_json(json)
         json['mountpoint'] = str(self.mountpoint) 
+        return json
 
 
-class VolumeMountResponse(_MountPointResponse):
+class Volume(_MountPointMessage):
+    def __init__(self, **args):
+        super().__init__(**args)
+        self._ensure_has_fields("name")
+        if hasattr(self, "status"):
+            assert isinstance(self.status, dict), "`status` must be a dict"
+    
+    def _to_dict(self):
+        return self._alter_json(self.__dict__)
+
+
+class VolumeMountResponse(_MountPointMessage):
     pass
 
 
@@ -117,12 +136,66 @@ class DriverCapabilitiesRequest(Request):
     pass
 
 
-class DriverCapabilitiesResponse(Response):
+@dataclass
+class Capabilities:
+    scope: scopes
+
+    def to_dict(self):
+        return {"scope": self.scope.value}
+
+
+class DriverCapabilitiesResponse(Message):
     def __init__(self, **args):
+        if "capabilities" in args:
+            if not isinstance(args["capabilities"], Capabilities):
+                args["capabilities"] = Capabilities(scopes(args["capabilities"]["scope"]))
+        if "scope" in args and not "capabilities" in args:
+            args["capabilities"] = Capabilities(scope=scopes(args["scope"]))
+            del args["scope"]
         super().__init__(**args)
-        self._ensure_has_fields("scope")
-        if not isinstance(self.scope, scopes):
-            self.scope = scopes(self.scope)
+        self._ensure_has_fields("capabilities")
+        assert isinstance(self.capabilities, Capabilities), "`capabilities` must be a dict or Capabilities object"
 
     def _alter_json(self, json):
-        json['scope'] = self.scope.value
+        super()._alter_json(json)
+        json['capabilities'] = self.capabilities.to_dict()
+        return json
+
+
+class VolumeGetRequest(Request):
+    def __init__(self, **args):
+        super().__init__(**args)
+        self._ensure_has_fields("name")
+
+
+class VolumeGetResponse(Request):
+    def __init__(self, **args):
+        super().__init__(**args)
+        self._ensure_has_fields("volume")
+        if not isinstance(self.volume, Volume):
+            self.volume = Volume(**self.volume)
+
+    def _alter_json(self, json):
+        super()._alter_json(json)
+        json['volume'] = self.volume._to_dict()
+        return json
+
+
+class VolumeListRequest(Request):
+    pass
+
+
+
+class VolumeListResponse(Request):
+    def __init__(self, **args):
+        super().__init__(**args)
+        self._ensure_has_fields("volumes")
+        assert isinstance(self.volumes, list), "`volumes` must be a list"
+        for i in range(len(self.volumes)):
+            if not isinstance(self.volumes[i], Volume):
+                self.volumes[i] = Volume(**self.volumes[i])
+
+    def _alter_json(self, json):
+        super()._alter_json(json)
+        json['volumes'] = [volume._to_dict() for volume in self.volumes]
+        return json
