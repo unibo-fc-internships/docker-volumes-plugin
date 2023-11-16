@@ -204,6 +204,8 @@ __all__ = [
     "paths",
     "scopes",
     "Message",
+    "Request",
+    "Response",
     "VolumeCreateRequest",
     "VolumeCreateResponse",
     "VolumeRemoveRequest",
