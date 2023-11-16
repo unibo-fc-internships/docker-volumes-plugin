@@ -8,7 +8,6 @@ from dataclasses import dataclass
 class paths(Enum):
     VOLUME_CREATE = "/VolumeDriver.Create"
     VOLUME_REMOVE = "/VolumeDriver.Remove"
-    VOLUME_PATH = "/VolumeDriver.Path"
     VOLUME_MOUNT = "/VolumeDriver.Mount"
     VOLUME_UNMOUNT = "/VolumeDriver.Unmount"
     VOLUME_GET = "/VolumeDriver.Get"
@@ -199,3 +198,26 @@ class VolumeListResponse(Request):
         super()._alter_json(json)
         json['volumes'] = [volume._to_dict() for volume in self.volumes]
         return json
+
+
+__all__ = [
+    "paths",
+    "scopes",
+    "Message",
+    "VolumeCreateRequest",
+    "VolumeCreateResponse",
+    "VolumeRemoveRequest",
+    "VolumeRemoveResponse",
+    "VolumeMountRequest",
+    "VolumeMountResponse",
+    "VolumeUnmountRequest",
+    "VolumeUnmountResponse",
+    "DriverCapabilitiesRequest",
+    "Capabilities",
+    "DriverCapabilitiesResponse",
+    "VolumeGetRequest",
+    "VolumeGetResponse",
+    "VolumeListRequest",
+    "VolumeListResponse",
+    "Volume",
+]

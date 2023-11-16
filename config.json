@@ -9,7 +9,7 @@
     "--app",
     "plugin",
     "run",
-    "--host=/run/docker/plugins/$PLUGIN_NAME.sock"
+    "--host=/run/docker/plugins/volumes-on-paths.sock"
   ],
   "interface": {
     "socket": "volumes-on-paths.sock",
@@ -22,8 +22,8 @@
   },
   "mounts": [
     {
-        "destination": "/mnt",
-        "source": "/mnt",
+        "destination": "/var/log/volumes-on-paths.log",
+        "source": "/var/log/volumes-on-paths.log",
         "type": "bind",
         "options": [
             "bind",
@@ -31,7 +31,7 @@
         ]
     }
   ],
-  "propagatedMount": "/var/logs/",
+  "propagatedMount": "/mnt",
   "env": [
     {
       "description": "",
