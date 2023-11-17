@@ -119,8 +119,10 @@ class Volume(_MountPointMessage):
         return self._alter_json(self.__dict__)
 
 
-class VolumeMountResponse(_MountPointMessage):
-    pass
+class VolumeMountResponse(Response, _MountPointMessage):
+    def __init__(self, **args):
+        Response.__init__(self, **args)
+        _MountPointMessage.__init__(self, **args)
 
 
 class VolumeUnmountRequest(_NameIdRequest):
@@ -167,7 +169,7 @@ class VolumeGetRequest(Request):
         self._ensure_has_fields("name")
 
 
-class VolumeGetResponse(Request):
+class VolumeGetResponse(Response):
     def __init__(self, **args):
         super().__init__(**args)
         self._ensure_has_fields("volume")
@@ -185,7 +187,7 @@ class VolumeListRequest(Request):
 
 
 
-class VolumeListResponse(Request):
+class VolumeListResponse(Response):
     def __init__(self, **args):
         super().__init__(**args)
         self._ensure_has_fields("volumes")

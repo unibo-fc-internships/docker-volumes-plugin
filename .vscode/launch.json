@@ -11,6 +11,14 @@
             "module": "unittest",
             "justMyCode": true,
             "args": ["discover", "-s", "tests"]
+        },
+        {
+            "name": "Run plugin tests",
+            "type": "python",
+            "request": "launch",
+            "module": "unittest",
+            "justMyCode": true,
+            "args": ["discover", "-s", "tests", "-p", "test_plugin.py"]
         }
     ]
 }
