@@ -1,6 +1,7 @@
 PLUGIN_NAME = gciatto/volumes-on-paths
 PLUGIN_TAG ?= latest
 OUTPUT_DIR ?= ./.plugin
+CONTAINER_NAME = container-gciatto-volumes-on-paths-latest
 
 all: clean rootfs create
 
@@ -18,9 +19,9 @@ rootfs: config
 	@docker build -t ${PLUGIN_NAME}:rootfs .
 	@echo "### create rootfs directory in ${OUTPUT_DIR}/rootfs"
 	@mkdir -p ${OUTPUT_DIR}/rootfs
-	@docker create --name container-${PLUGIN_NAME}:${PLUGIN_TAG} ${PLUGIN_NAME}:rootfs
-	@docker export container-${PLUGIN_NAME}:${PLUGIN_TAG} | tar -x -C ${OUTPUT_DIR}/rootfs
-	@docker rm -vf container-${PLUGIN_NAME}:${PLUGIN_TAG}
+	@docker create --name ${CONTAINER_NAME} ${PLUGIN_NAME}:rootfs
+	@docker export ${CONTAINER_NAME} | tar -x -C ${OUTPUT_DIR}/rootfs
+	@docker rm -vf ${CONTAINER_NAME}
 
 create:
 	@echo "### remove existing plugin ${PLUGIN_NAME}:${PLUGIN_TAG} if exists"

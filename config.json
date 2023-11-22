@@ -22,8 +22,8 @@
   },
   "mounts": [
     {
-        "destination": "/var/log/volumes-on-paths.log",
-        "source": "/var/log/volumes-on-paths.log",
+        "destination": "/var/log/",
+        "source": "/var/log/",
         "type": "bind",
         "options": [
             "bind",

@@ -1,0 +1,7 @@
+tests/
+.vscode/
+.plugin/
+.venv/
+.idea/
+.gitignore
+.gitattributes
