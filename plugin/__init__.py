@@ -15,10 +15,19 @@ def _override_drive_selector(selector: DriveSelector):
     drive_selector = selector
 
 
+def _log_request(req):
+    msg = f"{req.method} {req.url}"
+    for h, v in req.headers:
+        msg += f"\n\t{h}: {v}"
+    msg += f"\n\t{req.get_data(as_text=True)}"
+    logging.debug(msg)
+
+
 def volumes_protocol(input: type, output: type):
     def decorator(f: typing.Callable[[input], output]):
         def wrapper():
-            req = input(**flask.request.get_json())
+            _log_request(flask.request)
+            req = input.parse_json(flask.request.get_data(as_text=True))
             try:
                 res = f(req)
                 assert isinstance(res, output), f"Expected {output}, got {type(res)}: {res}"

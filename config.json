@@ -48,7 +48,7 @@
       "settable": [
         "value"
       ],
-      "value": "*"
+      "value": "data"
     }
   ],
   "linux": {
