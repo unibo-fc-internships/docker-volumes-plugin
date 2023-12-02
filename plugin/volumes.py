@@ -2,6 +2,7 @@ import pathlib
 import os
 import shutil
 import typing
+from plugin._log import logging
 
 
 ROOT = pathlib.Path("/mnt")
@@ -9,10 +10,21 @@ USABLE_PATHS = os.getenv("USABLE_PATHS", "*").split(os.pathsep)
 DRIVES = [p for path in USABLE_PATHS for p in (ROOT).glob(path)]
 
 
+if not DRIVES:
+    DRIVES = [ROOT / "drive"]
+
+
+logging.debug("Environment: %s", os.environ)
+logging.info("ROOT=%s", ROOT)
+logging.debug("Content of ROOT: %s", list(ROOT.glob("*")))
+logging.info("USABLE_PATHS=%s", USABLE_PATHS)
+logging.info("DRIVES=%s", DRIVES)
+
+
 class DriveSelector:
     def __init__(self, drives: typing.Iterable[pathlib.Path | str] = DRIVES):
-        assert drives, f"No drives provided"
         self._drives = [pathlib.Path(path) for path in drives]
+        assert self._drives, f"No drives provided"
         self._drives.sort()
     
     def select_drive_for_new_volume(self, name: str) -> pathlib.Path:

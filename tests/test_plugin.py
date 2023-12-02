@@ -9,6 +9,7 @@ import shutil
 ROOT = pathlib.Path(tempfile.mkdtemp(prefix="test-docker-volumes-root-"))
 DRIVES = [ROOT / f"drive{i}" for i in range(3)]
 
+
 def setUpModule():
     if ROOT.exists():
         shutil.rmtree(ROOT)
