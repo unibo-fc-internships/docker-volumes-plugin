@@ -3,6 +3,7 @@ from abc import ABC
 from enum import Enum
 from pathlib import Path
 from dataclasses import dataclass
+from ._utils import Sentence
 
 
 class paths(Enum):
@@ -27,7 +28,18 @@ class Message(ABC):
     def to_json(self):
         tmp = dict(self.__dict__)
         tmp = self._alter_json(tmp)
+        tmp = self._normalise_dict_for_presentation(tmp)
         return json.dumps(tmp)
+
+    @classmethod
+    def _normalise_dict_for_presentation(cls, input):
+        if isinstance(input, dict):
+            return {Sentence(k).pascal_case(): cls._normalise_dict_for_presentation(v)
+                    for k, v in input.items()}
+        elif isinstance(input, list):
+            return [cls._normalise_dict_for_presentation(x) for x in input]
+        else:
+            return input
     
     def _alter_json(self, json):
         return json
@@ -51,7 +63,18 @@ class Message(ABC):
     @classmethod
     def parse_json(cls, input):
         dict = json.loads(input)
+        dict = cls._normalise_dict_for_storage(dict)
         return cls(**dict)
+
+    @classmethod
+    def _normalise_dict_for_storage(cls, input):
+        if isinstance(input, dict):
+            return {Sentence(k).snake_case(): cls._normalise_dict_for_storage(v)
+                    for k, v in input.items()}
+        elif isinstance(input, list):
+            return [cls._normalise_dict_for_storage(x) for x in input]
+        else:
+            return input
 
 
 class Request(Message):
@@ -69,7 +92,7 @@ class VolumeCreateRequest(Request):
     def __init__(self, **args):
         super().__init__(**args)
         self._ensure_has_fields("name", "opts")
-
+        # self.opts = self._normalise_dict_for_storage(self.opts)
 
 class VolumeCreateResponse(Response):
     pass

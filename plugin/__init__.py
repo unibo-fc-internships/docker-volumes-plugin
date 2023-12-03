@@ -104,7 +104,7 @@ def on_volume_get(req):
             name=req.name, 
             mountpoint=drive / req.name,
             status={
-                "mounted-by": mounts
+                "mounted_by": mounts
             }
         )
     )

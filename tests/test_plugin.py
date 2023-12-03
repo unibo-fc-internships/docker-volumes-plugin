@@ -36,14 +36,14 @@ class AbstractPluginTest(unittest.TestCase):
 
     def create_volume(self, name: str, opts: dict = None, variable: str = "volume"):
         resp = self.client.post("/VolumeDriver.Create", json={
-            "name": name,
-            "opts": opts or {}
+            "Name": name,
+            "Opts": opts or {}
         })
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.json["err"], "")
-        self.assertIsInstance(resp.json["name"], str)
-        self.assertTrue(resp.json["name"].startswith(name))
-        volume = DRIVES[0] / resp.json["name"]
+        self.assertEqual(resp.json["Err"], "")
+        self.assertIsInstance(resp.json["Name"], str)
+        self.assertTrue(resp.json["Name"].startswith(name))
+        volume = DRIVES[0] / resp.json["Name"]
         setattr(self, variable, volume)
         self.assertTrue(volume.exists())
         self.assertTrue(volume.is_dir())
@@ -51,10 +51,10 @@ class AbstractPluginTest(unittest.TestCase):
     def delete_volume(self, variable: str = "volume"):
         volume = getattr(self, variable)
         resp = self.client.post("/VolumeDriver.Remove", json={
-            "name": volume.name,
+            "Name": volume.name,
         })
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.json["err"], "")
+        self.assertEqual(resp.json["Err"], "")
         self.assertFalse(volume.exists())
 
     def mount_volume(self, container_id: str, volume_variable: str = "volume", info_variable: str = "info"):
@@ -63,12 +63,12 @@ class AbstractPluginTest(unittest.TestCase):
         setattr(self, info_variable, info_file)
         self.assertFalse(info_file.exists())
         resp = self.client.post("/VolumeDriver.Mount", json={
-            "name": volume.name,
-            "id": container_id
+            "Name": volume.name,
+            "Id": container_id
         })
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.json["err"], "")
-        self.assertEqual(resp.json["mountpoint"], str(volume))
+        self.assertEqual(resp.json["Err"], "")
+        self.assertEqual(resp.json["Mountpoint"], str(volume))
         self.assertTrue(info_file.exists())
 
     def unmount_volume(self, container_id: str, volume_variable: str = "volume", info_variable: str = "info", expected_status: int = 200):
@@ -77,15 +77,15 @@ class AbstractPluginTest(unittest.TestCase):
         if expected_status == 200:
             self.assertTrue(info_file.exists())
         resp = self.client.post("/VolumeDriver.Unmount", json={
-            "name": volume.name,
-            "id": container_id
+            "Name": volume.name,
+            "Id": container_id
         })
         self.assertEqual(resp.status_code, expected_status)
         if expected_status == 200:
-            self.assertEqual(resp.json["err"], "")
+            self.assertEqual(resp.json["Err"], "")
             self.assertFalse(info_file.exists())
         else:
-            self.assertTrue(volume.name in resp.json["err"])
+            self.assertTrue(volume.name in resp.json["Err"])
 
 
 class TestPluginSingleVolume(AbstractPluginTest):
@@ -98,7 +98,7 @@ class TestPluginSingleVolume(AbstractPluginTest):
     def test_driver_capabilities(self):
         resp = self.client.post("/VolumeDriver.Capabilities", json={})
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.json["capabilities"]["scope"], "global")
+        self.assertEqual(resp.json["Capabilities"]["Scope"], "global")
 
     def test_volume_mount_unmount(self):
         self.mount_volume("test-container")
@@ -109,21 +109,21 @@ class TestPluginSingleVolume(AbstractPluginTest):
 
     def test_volume_get(self):
         resp = self.client.post("/VolumeDriver.Get", json={
-            "name": self.volume.name
+            "Name": self.volume.name
         })
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.json["err"], "")
-        self.assertEqual(resp.json["volume"]["name"], self.volume.name)
-        self.assertEqual(resp.json["volume"]["mountpoint"], str(self.volume))
-        self.assertEqual(resp.json["volume"]["status"], {"mounted-by": []})
+        self.assertEqual(resp.json["Err"], "")
+        self.assertEqual(resp.json["Volume"]["Name"], self.volume.name)
+        self.assertEqual(resp.json["Volume"]["Mountpoint"], str(self.volume))
+        self.assertEqual(resp.json["Volume"]["Status"], {"MountedBy": []})
 
     def test_volume_list(self):
         resp = self.client.post("/VolumeDriver.List", json={})
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.json["err"], "")
-        self.assertEqual(len(resp.json["volumes"]), 1)
-        self.assertEqual(resp.json["volumes"][0]["name"], self.volume.name)
-        self.assertEqual(resp.json["volumes"][0]["mountpoint"], str(self.volume))
+        self.assertEqual(resp.json["Err"], "")
+        self.assertEqual(len(resp.json["Volumes"]), 1)
+        self.assertEqual(resp.json["Volumes"][0]["Name"], self.volume.name)
+        self.assertEqual(resp.json["Volumes"][0]["Mountpoint"], str(self.volume))
 
 
 class TestPluginSingleVolumeMultipleMounts(AbstractPluginTest):
@@ -134,13 +134,13 @@ class TestPluginSingleVolumeMultipleMounts(AbstractPluginTest):
 
     def test_volume_get(self):
         resp = self.client.post("/VolumeDriver.Get", json={
-            "name": self.volume.name
+            "Name": self.volume.name
         })
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.json["err"], "")
-        self.assertEqual(resp.json["volume"]["name"], self.volume.name)
-        self.assertEqual(resp.json["volume"]["mountpoint"], str(self.volume))
-        self.assertEqual(resp.json["volume"]["status"], {"mounted-by": ["test-container1", "test-container2"]})
+        self.assertEqual(resp.json["Err"], "")
+        self.assertEqual(resp.json["Volume"]["Name"], self.volume.name)
+        self.assertEqual(resp.json["Volume"]["Mountpoint"], str(self.volume))
+        self.assertEqual(resp.json["Volume"]["Status"], {"MountedBy": ["test-container1", "test-container2"]})
 
     def tearDown(self):
         self.unmount_volume("test-container1", info_variable="info1")

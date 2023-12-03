@@ -7,19 +7,19 @@ class TestVolumeCreateMessages(unittest.TestCase):
     def _request_assertions(self, request):
         self.assertEqual(request.name, "test")
         self.assertIsInstance(request.opts, dict)
-        self.assertEqual(request.opts["custom-option"], "value")
-        self.assertEqual(request.to_json(), """{"name": "test", "opts": {"custom-option": "value"}}""")
+        self.assertEqual(request.opts["custom_option"], "value")
+        self.assertEqual(request.to_json(), """{"Name": "test", "Opts": {"CustomOption": "value"}}""")
 
     def test_request_creation(self):
-        request = protocol.VolumeCreateRequest(name="test", opts={"custom-option": "value"})
+        request = protocol.VolumeCreateRequest(name="test", opts={"custom_option": "value"})
         self._request_assertions(request)
     
     def test_request_parsing(self):
         input = """
             {
-                "name": "test",
-                "opts": {
-                    "custom-option": "value"
+                "Name": "test",
+                "Opts": {
+                    "CustomOption": "value"
                 }
             }
             """
@@ -32,12 +32,12 @@ class TestVolumeCreateMessages(unittest.TestCase):
     def test_response_creation(self):
         response = protocol.VolumeCreateResponse(err="error")
         self._response_assertions(response)
-        self.assertEqual(response.to_json(), """{"err": "error"}""")
+        self.assertEqual(response.to_json(), """{"Err": "error"}""")
 
     def test_response_parsing(self):
         input = """
             {
-                "err": "error"
+                "Err": "error"
             }
             """
         response = protocol.VolumeCreateResponse.parse_json(input)
@@ -47,7 +47,7 @@ class TestVolumeCreateMessages(unittest.TestCase):
 class TestVolumeRemoveMessages(unittest.TestCase):
     def _request_assertions(self, request):
         self.assertEqual(request.name, "test")
-        self.assertEqual(request.to_json(), """{"name": "test"}""")
+        self.assertEqual(request.to_json(), """{"Name": "test"}""")
 
     def test_request_creation(self):
         request = protocol.VolumeRemoveRequest(name="test")
@@ -56,7 +56,7 @@ class TestVolumeRemoveMessages(unittest.TestCase):
     def test_request_parsing(self):
         input = """
             {
-                "name": "test"
+                "Name": "test"
             }
             """
         request = protocol.VolumeRemoveRequest.parse_json(input)
@@ -64,7 +64,7 @@ class TestVolumeRemoveMessages(unittest.TestCase):
 
     def _response_assertions(self, response):
         self.assertEqual(response.err, "error")
-        self.assertEqual(response.to_json(), """{"err": "error"}""")
+        self.assertEqual(response.to_json(), """{"Err": "error"}""")
 
     def test_response_creation(self):
         response = protocol.VolumeRemoveResponse(err="error")
@@ -73,7 +73,7 @@ class TestVolumeRemoveMessages(unittest.TestCase):
     def test_response_parsing(self):
         input = """
             {
-                "err": "error"
+                "Err": "error"
             }
             """
         response = protocol.VolumeRemoveResponse.parse_json(input)
@@ -84,7 +84,7 @@ class TestVolumeMountMessages(unittest.TestCase):
     def _request_assertions(self, request):
         self.assertEqual(request.name, "test")
         self.assertEqual(request.id, "b87d7442095999a92b")
-        self.assertEqual(request.to_json(), """{"name": "test", "id": "b87d7442095999a92b"}""")
+        self.assertEqual(request.to_json(), """{"Name": "test", "Id": "b87d7442095999a92b"}""")
 
     def test_request_creation(self):
         request = protocol.VolumeMountRequest(name="test", id="b87d7442095999a92b")
@@ -93,8 +93,8 @@ class TestVolumeMountMessages(unittest.TestCase):
     def test_request_parsing(self):
         input = """
             {
-                "name": "test",
-                "id": "b87d7442095999a92b"
+                "Name": "test",
+                "Id": "b87d7442095999a92b"
             }
             """
         request = protocol.VolumeMountRequest.parse_json(input)
@@ -103,7 +103,7 @@ class TestVolumeMountMessages(unittest.TestCase):
     def _response_assertions(self, response):
         self.assertEqual(response.mountpoint, pathlib.Path("/path/to/mount"))
         self.assertEqual(response.err, "error")
-        self.assertEqual(response.to_json(), """{"mountpoint": "/path/to/mount", "err": "error"}""")
+        self.assertEqual(response.to_json(), """{"Mountpoint": "/path/to/mount", "Err": "error"}""")
 
     def test_response_creation_from_string(self):
         response = protocol.VolumeMountResponse(mountpoint="/path/to/mount", err="error")
@@ -116,8 +116,8 @@ class TestVolumeMountMessages(unittest.TestCase):
     def test_response_parsing(self):
         input = """
             {
-                "mountpoint": "/path/to/mount",
-                "err": "error"
+                "Mountpoint": "/path/to/mount",
+                "Err": "error"
             }
             """
         response = protocol.VolumeMountResponse.parse_json(input)
@@ -128,7 +128,7 @@ class TestVolumeUnmountMessages(unittest.TestCase):
     def _request_assertions(self, request):
         self.assertEqual(request.name, "test")
         self.assertEqual(request.id, "b87d7442095999a92b")
-        self.assertEqual(request.to_json(), """{"name": "test", "id": "b87d7442095999a92b"}""")
+        self.assertEqual(request.to_json(), """{"Name": "test", "Id": "b87d7442095999a92b"}""")
 
     def test_request_creation(self):
         request = protocol.VolumeUnmountRequest(name="test", id="b87d7442095999a92b")
@@ -137,8 +137,8 @@ class TestVolumeUnmountMessages(unittest.TestCase):
     def test_request_parsing(self):
         input = """
             {
-                "name": "test",
-                "id": "b87d7442095999a92b"
+                "Name": "test",
+                "Id": "b87d7442095999a92b"
             }
             """
         request = protocol.VolumeUnmountRequest.parse_json(input)
@@ -146,7 +146,7 @@ class TestVolumeUnmountMessages(unittest.TestCase):
 
     def _response_assertions(self, response):
         self.assertEqual(response.err, "error")
-        self.assertEqual(response.to_json(), """{"err": "error"}""")
+        self.assertEqual(response.to_json(), """{"Err": "error"}""")
 
     def test_response_creation(self):
         response = protocol.VolumeUnmountResponse(err="error")
@@ -155,7 +155,7 @@ class TestVolumeUnmountMessages(unittest.TestCase):
     def test_response_parsing(self):
         input = """
             {
-                "err": "error"
+                "Err": "error"
             }
             """
         response = protocol.VolumeUnmountResponse.parse_json(input)
@@ -179,7 +179,7 @@ class TestDriverCapabilitiesMessages(unittest.TestCase):
     def _response_assertions(self, response):
         self.assertIsInstance(response.capabilities, protocol.Capabilities)
         self.assertEqual(response.capabilities.scope, protocol.scopes.GLOBAL)
-        self.assertEqual(response.to_json(), """{"capabilities": {"scope": "global"}}""")
+        self.assertEqual(response.to_json(), """{"Capabilities": {"Scope": "global"}}""")
 
     def test_response_creation_from_capabilities(self):
         response = protocol.DriverCapabilitiesResponse(
@@ -200,8 +200,8 @@ class TestDriverCapabilitiesMessages(unittest.TestCase):
     def test_response_parsing(self):
         input = """
             {
-                "capabilities": {
-                    "scope": "global"
+                "Capabilities": {
+                    "Scope": "global"
                 }
             }
             """
@@ -212,7 +212,7 @@ class TestDriverCapabilitiesMessages(unittest.TestCase):
 class TestVolumeGetMessages(unittest.TestCase):
     def _request_assertions(self, request):
         self.assertEqual(request.name, "test")
-        self.assertEqual(request.to_json(), """{"name": "test"}""")
+        self.assertEqual(request.to_json(), """{"Name": "test"}""")
 
     def test_request_creation(self):
         request = protocol.VolumeGetRequest(name="test")
@@ -221,7 +221,7 @@ class TestVolumeGetMessages(unittest.TestCase):
     def test_request_parsing(self):
         input = """
             {
-                "name": "test"
+                "Name": "test"
             }
             """
         request = protocol.VolumeGetRequest.parse_json(input)
@@ -232,15 +232,15 @@ class TestVolumeGetMessages(unittest.TestCase):
         self.assertIsInstance(response.volume, protocol.Volume)
         self.assertEqual(response.volume.name, "test")
         self.assertEqual(response.volume.mountpoint, pathlib.Path("/path/to/mount"))
-        self.assertEqual(response.volume.status, {"custom-option": "value"})
-        self.assertEqual(response.to_json(), """{"volume": {"name": "test", "mountpoint": "/path/to/mount", "status": {"custom-option": "value"}}, "err": "error"}""")
+        self.assertEqual(response.volume.status, {"custom_option": "value"})
+        self.assertEqual(response.to_json(), """{"Volume": {"Name": "test", "Mountpoint": "/path/to/mount", "Status": {"CustomOption": "value"}}, "Err": "error"}""")
 
     def test_response_creation_from_volume(self):
         response = protocol.VolumeGetResponse(
             volume=protocol.Volume(
                 name="test",
                 mountpoint=pathlib.Path("/path/to/mount"),
-                status={"custom-option": "value"}
+                status={"custom_option": "value"}
             ),
             err="error"
         )
@@ -251,7 +251,7 @@ class TestVolumeGetMessages(unittest.TestCase):
             volume={
                 "name": "test",
                 "mountpoint": "/path/to/mount",
-                "status": {"custom-option": "value"}
+                "status": {"custom_option": "value"}
             },
             err="error"
         )
@@ -260,14 +260,14 @@ class TestVolumeGetMessages(unittest.TestCase):
     def test_response_parsing(self):
         input = """
             {
-                "volume": {
-                    "name": "test",
-                    "mountpoint": "/path/to/mount",
-                    "status": {
-                        "custom-option": "value"
+                "Volume": {
+                    "Name": "test",
+                    "Mountpoint": "/path/to/mount",
+                    "Status": {
+                        "CustomOption": "value"
                     }
                 },
-                "err": "error"
+                "Err": "error"
             }
             """
         response = protocol.VolumeGetResponse.parse_json(input)
@@ -297,8 +297,8 @@ class TestVolumeListMessages(unittest.TestCase):
             self.assertEqual(volume.name, f"test{i}")
             self.assertEqual(volume.mountpoint, pathlib.Path(f"/path/to/mount{i}"))
             i += 1
-        self.assertEqual(response.to_json(), """{"volumes": [{"name": "test1", "mountpoint": "/path/to/mount1"}, """
-                         """{"name": "test2", "mountpoint": "/path/to/mount2"}], "err": "error"}""")
+        self.assertEqual(response.to_json(), """{"Volumes": [{"Name": "test1", "Mountpoint": "/path/to/mount1"}, """
+                         """{"Name": "test2", "Mountpoint": "/path/to/mount2"}], "Err": "error"}""")
 
     def test_response_creation_from_volume(self):
         response = protocol.VolumeListResponse(
@@ -335,17 +335,17 @@ class TestVolumeListMessages(unittest.TestCase):
     def test_response_parsing(self):
         input = """
             {
-                "volumes": [
+                "Volumes": [
                     {
-                        "name": "test1",
-                        "mountpoint": "/path/to/mount1"
+                        "Name": "test1",
+                        "Mountpoint": "/path/to/mount1"
                     },
                     {
-                        "name": "test2",
-                        "mountpoint": "/path/to/mount2"
+                        "Name": "test2",
+                        "Mountpoint": "/path/to/mount2"
                     }
                 ],
-                "err": "error"
+                "Err": "error"
             }
             """
         response = protocol.VolumeListResponse.parse_json(input)
