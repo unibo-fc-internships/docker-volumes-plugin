@@ -37,7 +37,7 @@ disable:
 	@echo "### disable plugin ${PLUGIN_NAME}:${PLUGIN_TAG}"
 	@docker plugin disable ${PLUGIN_NAME}:${PLUGIN_TAG}
 
-push:  create
+push:
 	@echo "### push plugin ${PLUGIN_NAME}:${PLUGIN_TAG}"
 	@docker plugin push ${PLUGIN_NAME}:${PLUGIN_TAG}
 
