@@ -34,7 +34,7 @@ class Message(ABC):
     @classmethod
     def _normalise_dict_for_presentation(cls, input):
         if isinstance(input, dict):
-            return {Sentence(k).pascal_case(): cls._normalise_dict_for_presentation(v)
+            return {Sentence(k).pascal_case() if k != "id" else "ID": cls._normalise_dict_for_presentation(v)
                     for k, v in input.items()}
         elif isinstance(input, list):
             return [cls._normalise_dict_for_presentation(x) for x in input]
@@ -69,7 +69,7 @@ class Message(ABC):
     @classmethod
     def _normalise_dict_for_storage(cls, input):
         if isinstance(input, dict):
-            return {Sentence(k).snake_case(): cls._normalise_dict_for_storage(v)
+            return {Sentence(k).snake_case() if k != "ID" else "id": cls._normalise_dict_for_storage(v)
                     for k, v in input.items()}
         elif isinstance(input, list):
             return [cls._normalise_dict_for_storage(x) for x in input]

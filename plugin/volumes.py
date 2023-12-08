@@ -14,11 +14,11 @@ if not DRIVES:
     DRIVES = [ROOT / "drive"]
 
 
-logging.debug("Environment: %s", os.environ)
-logging.info("ROOT=%s", ROOT)
-logging.debug("Content of ROOT: %s", list(ROOT.glob("*")))
+logging.debug("Environment: {%s}", ", ".join([f"{k}={v}" for k, v in os.environ.items()]))
+logging.info("ROOT='%s'", str(ROOT))
+logging.debug("Content of ROOT: %s", [str(f) for f in ROOT.glob("*")])
 logging.info("USABLE_PATHS=%s", USABLE_PATHS)
-logging.info("DRIVES=%s", DRIVES)
+logging.info("DRIVES=%s", [str(d) for d in DRIVES])
 
 
 class DriveSelector:
@@ -55,13 +55,13 @@ class FirstDriveSelector(DriveSelector):
         return None
     
 
-def create_volume(drive: pathlib.Path, name: str, mod: int = 0o777) -> bool:
+def create_volume(drive: pathlib.Path, name: str, mod: int = 0o777) -> pathlib.Path:
     candidate = drive / name
     if candidate.exists():
-        return False
+        return None
     candidate.mkdir()
     candidate.chmod(mod)
-    return True
+    return candidate
 
 
 def remove_volume(drive: pathlib.Path, name: str) -> bool:

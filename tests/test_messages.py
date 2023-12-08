@@ -84,7 +84,7 @@ class TestVolumeMountMessages(unittest.TestCase):
     def _request_assertions(self, request):
         self.assertEqual(request.name, "test")
         self.assertEqual(request.id, "b87d7442095999a92b")
-        self.assertEqual(request.to_json(), """{"Name": "test", "Id": "b87d7442095999a92b"}""")
+        self.assertEqual(request.to_json(), """{"Name": "test", "ID": "b87d7442095999a92b"}""")
 
     def test_request_creation(self):
         request = protocol.VolumeMountRequest(name="test", id="b87d7442095999a92b")
@@ -94,7 +94,7 @@ class TestVolumeMountMessages(unittest.TestCase):
         input = """
             {
                 "Name": "test",
-                "Id": "b87d7442095999a92b"
+                "ID": "b87d7442095999a92b"
             }
             """
         request = protocol.VolumeMountRequest.parse_json(input)
@@ -128,7 +128,7 @@ class TestVolumeUnmountMessages(unittest.TestCase):
     def _request_assertions(self, request):
         self.assertEqual(request.name, "test")
         self.assertEqual(request.id, "b87d7442095999a92b")
-        self.assertEqual(request.to_json(), """{"Name": "test", "Id": "b87d7442095999a92b"}""")
+        self.assertEqual(request.to_json(), """{"Name": "test", "ID": "b87d7442095999a92b"}""")
 
     def test_request_creation(self):
         request = protocol.VolumeUnmountRequest(name="test", id="b87d7442095999a92b")
@@ -138,7 +138,7 @@ class TestVolumeUnmountMessages(unittest.TestCase):
         input = """
             {
                 "Name": "test",
-                "Id": "b87d7442095999a92b"
+                "ID": "b87d7442095999a92b"
             }
             """
         request = protocol.VolumeUnmountRequest.parse_json(input)

@@ -64,7 +64,7 @@ class AbstractPluginTest(unittest.TestCase):
         self.assertFalse(info_file.exists())
         resp = self.client.post("/VolumeDriver.Mount", json={
             "Name": volume.name,
-            "Id": container_id
+            "ID": container_id
         })
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.json["Err"], "")
@@ -78,7 +78,7 @@ class AbstractPluginTest(unittest.TestCase):
             self.assertTrue(info_file.exists())
         resp = self.client.post("/VolumeDriver.Unmount", json={
             "Name": volume.name,
-            "Id": container_id
+            "ID": container_id
         })
         self.assertEqual(resp.status_code, expected_status)
         if expected_status == 200:

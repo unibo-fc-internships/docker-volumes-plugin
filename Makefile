@@ -3,7 +3,7 @@ PLUGIN_TAG ?= latest
 OUTPUT_DIR ?= ./.plugin
 CONTAINER_NAME = container-gciatto-volumes-on-paths-latest
 
-all: clean rootfs create
+all: clean rootfs create enable
 
 clean:
 	@echo "### rm ${OUTPUT_DIR}"
@@ -23,7 +23,7 @@ rootfs: config
 	@docker export ${CONTAINER_NAME} | tar -x -C ${OUTPUT_DIR}/rootfs
 	@docker rm -vf ${CONTAINER_NAME}
 
-create:
+create: rootfs
 	@echo "### remove existing plugin ${PLUGIN_NAME}:${PLUGIN_TAG} if exists"
 	@docker plugin rm -f ${PLUGIN_NAME}:${PLUGIN_TAG} || true
 	@echo "### create new plugin ${PLUGIN_NAME}:${PLUGIN_TAG} from ${OUTPUT_DIR}"
@@ -37,6 +37,10 @@ disable:
 	@echo "### disable plugin ${PLUGIN_NAME}:${PLUGIN_TAG}"
 	@docker plugin disable ${PLUGIN_NAME}:${PLUGIN_TAG}
 
-push:  clean rootfs create enable
+push:  create
 	@echo "### push plugin ${PLUGIN_NAME}:${PLUGIN_TAG}"
 	@docker plugin push ${PLUGIN_NAME}:${PLUGIN_TAG}
+
+#set_usable_paths: create
+#    @echo "### setting var USABLE_PATHS=$(path)"
+#    @docker plugin set "${PLUGIN_NAME}:${PLUGIN_TAG}" USABLE_PATHS=$(path)
