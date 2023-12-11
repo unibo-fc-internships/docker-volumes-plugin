@@ -1,10 +1,8 @@
-import logging
 import flask
 from ._log import *
 from .protocol import *
 from .volumes import *
 import typing
-import uuid
 
 
 app = flask.Flask(__name__)
@@ -59,7 +57,7 @@ def volumes_protocol(input: type, output: type):
 @volumes_protocol(VolumeCreateRequest, VolumeCreateResponse)
 def on_volume_create(req):
     logging.info("Request to create volume %s", req.name)
-    name = f"{req.name}-{str(uuid.uuid4())}"
+    name = req.name
     drive = drive_selector.select_drive_for_new_volume(name)
     if drive is None:
         raise RuntimeError("No drive available")
@@ -95,7 +93,7 @@ def on_volume_mount(req):
     if not mount_volume(drive, req.name, req.id):
         raise RuntimeError(f"Impossible to mount volume {req.name}")
     logging.info("Volume %s mounted by %s", req.name, req.id)
-    return VolumeMountResponse(mountpoint=drive / req.name)
+    return VolumeMountResponse(mountpoint=get_data_dir_for_volume(drive, req.name))
 
 
 @app.post(paths.VOLUME_UNMOUNT.value)
@@ -118,7 +116,9 @@ def on_volume_get(req):
     drive = drive_selector.find_drive_of_volume(req.name)
     if drive is None:
         raise RuntimeError(f"Volume {req.name} not found")
-    mountpoint = str(drive / req.name)
+    mountpoint = get_data_dir_for_volume(drive, req.name)
+    if mountpoint is None:
+        raise RuntimeError(f"Volume {req.name} not found")
     mounts = list(volume_mounts(drive, req.name))
     mounts.sort()
     logging.info("Volume %s is stored in %s mounted by %s", req.name, mountpoint, mounts)
@@ -137,7 +137,8 @@ def on_volume_get(req):
 @volumes_protocol(VolumeListRequest, VolumeListResponse)
 def on_volume_list(req):
     logging.info("Request to list volumes")
-    volumes = [Volume(name=name, mountpoint=drive / name) for drive, name in drive_selector.all_volumes()]
+    volumes = [Volume(name=name, mountpoint=get_data_dir_for_volume(drive, name))
+               for drive, name in drive_selector.all_volumes()]
     logging.info("Found %d volumes: %s", len(volumes), [v.name for v in volumes])
     return VolumeListResponse(volumes=volumes)
 
