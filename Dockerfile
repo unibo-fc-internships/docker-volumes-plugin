@@ -1,7 +1,9 @@
 FROM python:latest
 ENV PLUGIN_NAME volumes-on-paths
-COPY . /$PLUGIN_NAME/
+COPY ./requirements.txt /$PLUGIN_NAME/
 WORKDIR /$PLUGIN_NAME
 RUN pip install -r requirements.txt
+COPY . /$PLUGIN_NAME/
 RUN mkdir -p /run/docker/plugins
-ENTRYPOINT /usr/local/bin/python -m flask --app plugin run --host=unix:///run/docker/plugins/$PLUGIN_NAME.sock
+ENTRYPOINT /usr/bin/bash /$PLUGIN_NAME/entrypoint.sh
+CMD /usr/local/bin/python -m flask --app plugin.service run --host=unix:///run/docker/plugins/$PLUGIN_NAME.sock
