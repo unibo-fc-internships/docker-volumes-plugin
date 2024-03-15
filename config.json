@@ -29,18 +29,8 @@
             "bind",
             "rw"
         ]
-    },
-    {
-      "destination": "/mnt/",
-      "source": "/mnt/",
-      "type": "bind",
-      "options": [
-          "bind",
-          "rw"
-      ]
     }
   ],
-  "propagatedMount": "/mnt",
   "env": [
     {
       "description": "",
