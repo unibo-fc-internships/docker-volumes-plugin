@@ -5,6 +5,9 @@ from dataclasses import dataclass
 import typing
 
 
+ROOT = pathlib.Path("/var/lib/docker/x-drives")
+
+
 @dataclass
 class NFSFilesystem:
     server: str
@@ -17,6 +20,7 @@ class NFSFilesystem:
  
     @classmethod
     def parse(cls, string: str) -> 'NFSFilesystem':
+        """parses the <IP>:<remote_address> <local_address> <options> format"""
         parts = string.split()
         assert len(parts) in {2,3}, f"Invalid NFS mount point string: {string}"
         options = set() if len(parts) == 2 else { s.strip() for s in parts[2].split(",") }
@@ -40,6 +44,12 @@ NFS_MOUNTS = [
     for k in os.environ.keys()
     if k.startswith("NFS_MOUNT")
 ]
+
+for mount in NFS_MOUNTS:
+    if mount.local_path.is_absolute:
+        raise ValueError("Only relative local paths are allowed. This is not a valid local path: " + mount.local_path)
+    else: 
+        mount.local_path = ROOT / mount.local_path
 
 
 if __name__ == "__main__":

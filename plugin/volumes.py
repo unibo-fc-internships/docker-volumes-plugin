@@ -3,6 +3,7 @@ import os
 import shutil
 import typing
 from plugin._log import logging
+import plugin.nfs as nfs
 import uuid
 import re
 
@@ -12,9 +13,8 @@ _PATTERN_UUID = re.compile(f"^{_REGEX_UUID}$")
 _PATTERN_VOLUME_PATH = re.compile(f"^(.+?)-({_REGEX_UUID})$")
 
 
-ROOT = pathlib.Path("/mnt")
-USABLE_PATHS = os.getenv("USABLE_PATHS", "*").split(os.pathsep)
-DRIVES = [p for path in USABLE_PATHS for p in (ROOT).glob(path)]
+ROOT = nfs.ROOT
+DRIVES = [mount.local_path for mount in nfs.NFS_MOUNTS]
 
 
 if not DRIVES:
@@ -24,7 +24,6 @@ if not DRIVES:
 logging.debug("Environment: {%s}", ", ".join([f"{k}={v}" for k, v in os.environ.items()]))
 logging.info("ROOT='%s'", str(ROOT))
 logging.debug("Content of ROOT: %s", [str(f) for f in ROOT.glob("*")])
-logging.info("USABLE_PATHS=%s", USABLE_PATHS)
 logging.info("DRIVES=%s", [str(d) for d in DRIVES])
 
 

@@ -41,6 +41,7 @@
       "value": "data"
     }
   ],
+  "propagatedMount": "/var/lib/docker/x-drives",
   "linux": {
     "capabilities": [
       "CAP_SYS_ADMIN"
