@@ -2,34 +2,50 @@
 ## Installation
 
 ### Installation from repository
-```bash
-git clone git@github.com:almaai-unibo/ascend-npu-image.git
-cd ascend-npu-image/
-make all
-```
+1. Clone this repo, jump into the cloned folder, then run:
+    ```bash
+    make create
+    ```
 
-You should see the newly installed docker plugin with
-```bash
-docker plugin ls
-```
+2. You should see the newly installed docker plugin with:
+    ```bash
+    docker plugin ls
+    ```
 
-In order to enable the plugin you can run
-```bash
-make enable
-```
+3. Set the remote NFS folder to be mounted:
+    ```bash
+    make set NFS_MOUNT='SERVER_IP_OR_NAME:REMOTE_PATH LOCAL_PATH NFS_OPTIONS'
+    ```
+    - NFS options here: <https://linux.die.net/man/5/nfs>
+
+4. Ensure your Docker Daemon is running in Swarm mode, if not `docker swarm init`
+
+5. Enable the plugin:
+    ```bash
+    make enable
+    ```
+
+6. To inspect the docker daemons logs
+    ```bash
+    make log_dockerd
+    ```
+
+7. To inspect the plugin's logs
+    ```bash
+    make log_plugin
+    ```
 
 ### Installation from Dockerhub
+
 TODO
 
 ## Usage
+
 TODO
 
 ## Debug
-After plugin's installation, you can debug its APIs using the following command
-```bash
-curl -H "Content-Type: application/json" -XPOST -d '{}' --unix-socket /var/run/docker/plugins/90b599f9f62e16da031ebd37f7d0b0c19cc655886a65b97cbb27d34d3044fe84/plugin.sock http://localhost/<route>
-```
-Where route is one of the rest API configured on the plugin.
+
+TODO
 
 ## Useful links
 - API to implement a Docker Volume Plugin: https://docs.docker.com/engine/extend/plugins_volume/
