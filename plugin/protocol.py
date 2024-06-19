@@ -7,6 +7,7 @@ from ._utils import Sentence
 
 
 class paths(Enum):
+    PLUGIN_ACTIVATE = "/Plugin.Activate"
     VOLUME_CREATE = "/VolumeDriver.Create"
     VOLUME_REMOVE = "/VolumeDriver.Remove"
     VOLUME_MOUNT = "/VolumeDriver.Mount"
@@ -86,6 +87,13 @@ class Response(Message):
         super().__init__(**args)
         if not hasattr(self, "err"):
             self.err = ""
+
+class PluginActivateRequest(Request):
+    def __init__(self, **args):
+        super().__init__(**args)
+
+class PluginActivateResponse(Response):
+    pass
 
 
 class VolumeCreateRequest(Request):

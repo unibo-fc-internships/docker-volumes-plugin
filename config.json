@@ -7,7 +7,7 @@
     "-m",
     "flask",
     "--app",
-    "plugin",
+    "plugin.service",
     "run",
     "--host=unix:///run/docker/plugins/volumes-on-paths.sock"
   ],
@@ -34,7 +34,7 @@
   "env": [
     {
       "description": "",
-      "name": "USABLE_PATHS",
+      "name": "NFS_MOUNT",
       "settable": [
         "value"
       ],

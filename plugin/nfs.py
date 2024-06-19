@@ -17,6 +17,7 @@ class NFSFilesystem:
  
     @classmethod
     def parse(cls, string: str) -> 'NFSFilesystem':
+        """parses the <IP>:<remote_address> <local_address> <options> format"""
         parts = string.split()
         assert len(parts) in {2,3}, f"Invalid NFS mount point string: {string}"
         options = set() if len(parts) == 2 else { s.strip() for s in parts[2].split(",") }
@@ -27,11 +28,13 @@ class NFSFilesystem:
         return cls(server, remote_path, local_path, options)
 
     def __str__(self):
+        """returns the shell command to mount the nfs"""
         return f"mount -t nfs {','.join(self.options)} {self.server}:{self.remote_path} {self.local_path}"
 
     def mount(self):
         if not self.local_path.exists():
             self.local_path.mkdir(parents=True)
+        # call the command to mount the NFS
         assert os.system(str(self)) == 0, f"Failed to mount {self.server}:{self.remote_path} to {self.local_path}"
 
 
@@ -45,5 +48,5 @@ NFS_MOUNTS = [
 if __name__ == "__main__":
     logging.info(f"NFS directories to mount: {len(NFS_MOUNTS)}")
     for mount in NFS_MOUNTS:
-        mount.mount()
+        # mount.mount()
         logging.info(f"Mounted {mount.server}:{mount.remote_path} to {mount.local_path} with options {mount.options}")
