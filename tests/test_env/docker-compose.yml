@@ -1,0 +1,55 @@
+services:
+  storage1:
+    privileged: true
+    image: itsthenetwork/nfs-server-alpine
+    environment:
+      - SHARED_DIRECTORY=/data/
+    volumes:
+      - data1:/data/
+    cap_add:
+      - SYS_ADMIN
+      - SETPCAP
+    networks:
+      - my_network
+  
+  storage2:
+    privileged: true
+    image: itsthenetwork/nfs-server-alpine
+    environment:
+      - SHARED_DIRECTORY=/data/
+    volumes:
+      - data2:/data/
+    cap_add:
+      - SYS_ADMIN
+      - SETPCAP
+    networks:
+      - my_network
+
+  docker1:
+    privileged: true
+    image: docker:dind
+    volumes:
+      - ./logs/docker1:/var/log/
+    networks:
+      - my_network
+    depends_on:
+      - storage1
+      - storage2
+
+  docker2:
+    privileged: true
+    image: docker:dind
+    volumes:
+      - ./logs/docker2:/var/log/
+    networks:
+      - my_network
+    depends_on:
+      - storage1
+      - storage2
+
+volumes:
+  data1: {}
+  data2: {}
+
+networks:
+  my_network: {}
