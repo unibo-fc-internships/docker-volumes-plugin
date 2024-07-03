@@ -3,6 +3,8 @@
   "documentation": "https://example.com/docker/plugin",
   "workdir": "/volumes-on-paths",
   "entrypoint": [
+    "/usr/bin/bash",
+    "./entrypoint.sh",
     "python",
     "-m",
     "flask",
@@ -18,7 +20,7 @@
     ]
   },
   "network": {
-    "type": "none"
+    "type": "host"
   },
   "mounts": [
     {
