@@ -1,3 +1,5 @@
+# FIXME: this file name is not descriptive
+
 import logging
 import subprocess
 import sys
@@ -5,6 +7,11 @@ import unittest
 import os
 import string
 
+# FIXME: where is this dependency declared?
+# FIXME: I later noticed that there is another requirements.txt file in this directory. This is bad practice.
+# Requirements files should be at the root of the project.
+# Yet, separating test dependencies from production dependencies is a good practice.
+# I'll teach you how to handle these situations.
 from faker import Faker
 PLUGIN = "gciatto/volumes-on-paths:latest"
 NFS_MOUNTS = "storage1:/"
@@ -22,7 +29,13 @@ stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
 
 
+# FIXME: a class only having classmethods is a code smell. This should be a module instead.
+# if you need a singleton, use a module-level variable
 class DockerService:
+
+    # FIXME: the current design of this class is kinda fragile because it does not explicitly mentions the path to the docker-compose file.
+    # I'll teach you how to handle this.
+
     @classmethod
     def up(cls):
         cls.down()
@@ -65,12 +78,16 @@ class DockerService:
         return cls.exec_all(f"docker plugin enable {plugin}")
 
 
+# FIXME: code duplication: all test classes share a portion of the setup and teardown code
+# (namely, starting and stopping the DockerService servers). This should be refactored into an abstract base class.
 class InstallTest(unittest.TestCase):
     def setUp(self):
+        # FIXME: copy-pasted code, the service being started is DockerService, not NFS
         logging.info("Start NFS servers and docker instances...")
         DockerService.up()
 
     def tearDown(self):
+        # FIXME: copy-pasted code, the service being stopped is DockerService, not NFS
         logging.info("Stop NFS server...")
         DockerService.down()
 
@@ -83,6 +100,7 @@ class InstallTest(unittest.TestCase):
 class VolumeTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        # FIXME: same error as above, due to copy-pasted code. DRY principle is violated.
         logging.info("Start NFS servers and docker instances...")
         DockerService.up()
         logging.info("Install Plugin...")
@@ -95,6 +113,8 @@ class VolumeTest(unittest.TestCase):
         logging.info("Stop NFS server...")
         DockerService.down()
 
+    # FIXME: each test case should tell a story. The story here is not clear due to verbosity.
+    # Recall to discuss with me how to refactor this.
     def test_create(self):
         def test_docker_instance_has_volume(docker_instance: string, volume: string):
             ls = DockerService.exec_output("docker volume ls", docker_instance)
@@ -212,3 +232,5 @@ class DataSyncTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+# TODO:
