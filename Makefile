@@ -1,4 +1,4 @@
-PLUGIN_NAME = gciatto/volumes-on-paths
+PLUGIN_NAME = francoisjn/volumes-on-paths
 PLUGIN_TAG ?= latest
 OUTPUT_DIR ?= ./.plugin
 CONTAINER_NAME = container-gciatto-volumes-on-paths-latest

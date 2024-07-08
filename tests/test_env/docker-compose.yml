@@ -35,6 +35,9 @@ services:
     depends_on:
       - storage1
       - storage2
+    healthcheck:
+      test: docker ps || exit 1
+
 
   docker2:
     privileged: true
@@ -46,6 +49,8 @@ services:
     depends_on:
       - storage1
       - storage2
+    healthcheck:
+      test: docker ps || exit 1
 
 volumes:
   data1: {}
