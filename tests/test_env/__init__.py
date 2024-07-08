@@ -18,7 +18,6 @@ stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
 
 PLUGIN = "francoisjn/volumes-on-paths:latest"
-NFS_MOUNTS = "storage1:/"
 
 PATH_DOCKER_COMPOSE = Path(__file__).parent / "docker-compose.yml"
 SPEC_DOCKER_COMPOSE = yaml.safe_load(PATH_DOCKER_COMPOSE.read_text())
@@ -33,6 +32,15 @@ class DockerService:
         def exec(self, command: string) -> CompletedProcess[bytes]:
             return self._docker_service.exec(command, self.name)
 
+    class Storage:
+        def __init__(self, name: string, docker_service: 'DockerService', path=Path("/")):
+            self.name = name
+            self._docker_service = docker_service
+            self.path = path
+
+        def __str__(self):
+            return self.name + ":" + str(self.path)
+
     @property
     def dind_names(self):
         return [key for key in SPEC_DOCKER_COMPOSE["services"].keys() if key.startswith("docker")]
@@ -40,6 +48,14 @@ class DockerService:
     @property
     def dinds(self):
         return [self.Dind(name, self) for name in self.dind_names]
+
+    @property
+    def storage_names(self):
+        return [key for key in SPEC_DOCKER_COMPOSE["services"].keys() if key.startswith("storage")]
+
+    @property
+    def storages(self):
+        return [self.Storage(name, self) for name in self.storage_names]
 
     def call_docker_compose(self, sub_command: string) -> CompletedProcess[bytes]:
         process = subprocess.run(
@@ -75,8 +91,10 @@ class DockerService:
 
         return self.exec_all(f"docker plugin install {plugin} --disable --grant-all-permissions")
 
-    def conf_plugin(self, mounts=NFS_MOUNTS, plugin=PLUGIN):
-        return self.exec_all(f"docker plugin set {plugin} NFS_MOUNT={mounts}")
+    def conf_plugin(self, mounts: string = None, plugin=PLUGIN):
+        if mounts is None:
+            mounts = ";".join([str(storage) for storage in self.storages])
+        return self.exec_all(f"docker plugin set {plugin} NFS_MOUNT='{mounts}'")
 
     def enable_plugin(self, plugin=PLUGIN):
         return self.exec_all(f"docker plugin enable {plugin}")
