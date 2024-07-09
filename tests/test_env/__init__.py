@@ -2,7 +2,6 @@ import logging
 import shlex
 import subprocess
 import sys
-import time
 import unittest
 import string
 from pathlib import Path
@@ -24,7 +23,7 @@ SPEC_DOCKER_COMPOSE = yaml.safe_load(PATH_DOCKER_COMPOSE.read_text())
 
 
 class DockerService:
-    class Dind:
+    class Container:
         def __init__(self, name: string, docker_service: 'DockerService'):
             self.name = name
             self._docker_service = docker_service
@@ -32,8 +31,12 @@ class DockerService:
         def exec(self, command: string) -> CompletedProcess[bytes]:
             return self._docker_service.exec(command, self.name)
 
-    class Storage:
+    class Dind(Container):
+        ...
+
+    class Storage(Container):
         def __init__(self, name: string, docker_service: 'DockerService', path=Path("/")):
+            super().__init__(name, docker_service)
             self.name = name
             self._docker_service = docker_service
             self.path = path
@@ -239,6 +242,110 @@ class DataSyncTest(BaseVolumeMountedTest):
             ls = dind.exec(f"docker run -v {self.volume}:/data alpine ls /data")
             self.assertEqual(0, ls.returncode)
             self.assertNotIn(filename, ls.stdout.decode('UTF-8'))
+
+
+class DriveSelectorsTest(BasePluginInstalledTest):
+    def setUp(self):
+        super().setUp()
+        logging.info("Clean storages...")
+        for storage in docker_service.storages:
+            storage.exec(f"rm -rf /data/*").check_returncode()
+
+    def create_volume(self, volume: string, **opts):
+        opts_string = " ".join([f"-o {k}={v}" for k, v in opts.items()])
+        return docker_service.dinds[0].exec(f"docker volume create -d {PLUGIN} {opts_string} {volume}")
+
+    def remove_volume(self, volume: string):
+        return docker_service.dinds[0].exec(f"docker volume rm {volume}")
+
+    def test_default_driver(self):
+        self.volume = Faker().first_name()
+
+        create = self.create_volume(self.volume)
+        self.assertEqual(create.returncode, 0, f"Failed to create volume {self.volume} : {create.stderr.decode('UTF-8')}")
+
+        self.remove_volume(self.volume).check_returncode()
+
+    def test_first_drive_selector(self):
+        self.volume = Faker().first_name()
+
+        self.create_volume(self.volume, volume_driver="first").check_returncode()
+
+        self.remove_volume(self.volume).check_returncode()
+
+    def test_selected_drive_missing_param_selector(self):
+        self.volume = Faker().first_name()
+
+        self.assertNotEqual(0, self.create_volume(self.volume, volume_driver="selected").returncode)
+
+    def test_selected_drive_selector(self):
+        for storage in docker_service.storages:
+            self.volume = Faker().first_name()
+            self.create_volume(self.volume, volume_driver="selected", drive=f"{storage.name}:_").check_returncode()
+            ls = docker_service.exec("ls /data", storage.name)
+            self.assertIn(self.volume, ls.stdout.decode('UTF-8'))
+
+            self.remove_volume(self.volume).check_returncode()
+
+    def test_lowest_usage_drive_selector(self):
+        # create a 5MB file in the first storage to simulate filling
+        docker_service.storages[0].exec("dd if=/dev/zero of=/data/filler bs=1M count=5").check_returncode()
+
+        self.volume = Faker().first_name()
+        self.create_volume(self.volume, volume_driver="lowest_usage").check_returncode()
+
+        check_storage2 = docker_service.storages[1].exec("ls /data")
+        check_storage2.check_returncode()
+        self.assertIn(self.volume, check_storage2.stdout.decode('UTF-8'))
+
+        check_storage1 = docker_service.storages[0].exec("ls /data")
+        check_storage1.check_returncode()
+        self.assertNotIn(self.volume, check_storage1.stdout.decode('UTF-8'))
+
+        docker_service.storages[0].exec("rm /data/filler").check_returncode()
+        self.remove_volume(self.volume).check_returncode()
+
+    def test_highest_space_drive_selector(self):
+        # create a 5MB file in the first storage to simulate filling
+        docker_service.storages[1].exec("dd if=/dev/zero of=/data/filler bs=1M count=5").check_returncode()
+
+        self.volume = Faker().first_name()
+        self.create_volume(self.volume, volume_driver="highest_space").check_returncode()
+
+        check_storage2 = docker_service.storages[1].exec("ls /data")
+        check_storage2.check_returncode()
+        self.assertIn(self.volume, check_storage2.stdout.decode('UTF-8'))
+
+        check_storage1 = docker_service.storages[0].exec("ls /data")
+        check_storage1.check_returncode()
+        self.assertNotIn(self.volume, check_storage1.stdout.decode('UTF-8'))
+
+        docker_service.storages[1].exec("rm /data/filler").check_returncode()
+        self.remove_volume(self.volume).check_returncode()
+
+    def test_lowest_percentage_available_drive_selector(self):
+        # create a 5MB file in the first storage to simulate filling
+        docker_service.storages[1].exec("dd if=/dev/zero of=/data/filler bs=1M count=5").check_returncode()
+
+        self.volume = Faker().first_name()
+        self.create_volume(self.volume, volume_driver="lowest_percentage").check_returncode()
+
+        check_storage1 = docker_service.storages[0].exec("ls /data")
+        check_storage1.check_returncode()
+        self.assertIn(self.volume, check_storage1.stdout.decode('UTF-8'))
+
+        check_storage2 = docker_service.storages[1].exec("ls /data")
+        check_storage2.check_returncode()
+        self.assertNotIn(self.volume, check_storage2.stdout.decode('UTF-8'))
+
+        docker_service.storages[1].exec("rm /data/filler").check_returncode()
+        self.remove_volume(self.volume).check_returncode()
+
+    def test_unexisting_drive_selector(self):
+        self.volume = Faker().first_name()
+
+        create = self.create_volume(self.volume, volume_driver=Faker().first_name())
+        self.assertNotEqual(0, create.returncode)
 
 
 if __name__ == '__main__':

@@ -128,12 +128,17 @@ class DriveSelector:
         self._drives = [pathlib.Path(path) for path in drives]
         assert self._drives, f"No drives provided"
         self._drives.sort()
-    
-    def select_drive_for_new_volume(self, name: str) -> pathlib.Path:
+
+    def select_drive_for_new_volume(self, name: str, **opts) -> pathlib.Path:
         ...
 
     def find_drive_of_volume(self, name: str) -> pathlib.Path:
-        ...
+        volumes = list(v for v in self.all_volumes() if v[1] == name)
+        if len(volumes) > 1:
+            raise RuntimeError(f"Too many volumes with name {name}")
+        if len(volumes) == 0:
+            return None
+        return volumes[0][0]
 
     def all_volumes(self) -> typing.Iterable[tuple[pathlib.Path, str]]:
         for drive in self._drives:
@@ -146,14 +151,47 @@ class FirstDriveSelector(DriveSelector):
     def _first_drive(self):
         return self._drives[0]
 
-    def select_drive_for_new_volume(self, name: str) -> pathlib.Path:
+    def select_drive_for_new_volume(self, name: str, **opts) -> pathlib.Path:
         return self._first_drive
-    
-    def find_drive_of_volume(self, name: str) -> pathlib.Path:
-        try:
-            return VolumeDescriptor.find_one_with_name(self._first_drive, name).drive
-        except KeyError:
-            return None
+
+
+class SelectedDriveSelector(DriveSelector):
+    def select_drive_for_new_volume(self, name: str, drive: str = None, **opts) -> pathlib.Path:
+        if drive is None:
+            raise RuntimeError("No drive provided")
+        return pathlib.Path(ROOT / drive)
+
+
+class SpaceDriveSelector(DriveSelector):
+    def get_drive_data(self, drive: pathlib.Path):
+        total, used, free = shutil.disk_usage(drive)
+        return total, used, free
+
+
+class LowestUsedSpaceDriveSelector(SpaceDriveSelector):
+    def select_drive_for_new_volume(self, name: str, **opts) -> pathlib.Path:
+        os.system(f"ls -R {ROOT}")
+        for storage in self._drives:
+            total, used, free = self.get_drive_data(storage)
+            print(f"Drive {storage} has {free} bytes free, {used} bytes used, {total} bytes total")
+
+        drive = min(self._drives, key=lambda d: self.get_drive_data(d)[1])
+        return drive
+
+
+class HighestAvailableSpaceDriveSelector(SpaceDriveSelector):
+    def select_drive_for_new_volume(self, name: str, **opts) -> pathlib.Path:
+        drive = max(self._drives, key=lambda d: self.get_drive_data(d)[2])
+        return drive
+
+
+class LowestPercentageAvailableDriveSelector(SpaceDriveSelector):
+    def select_drive_for_new_volume(self, name: str, **opts) -> pathlib.Path:
+        def drive_percentage(d: pathlib.Path):
+            total, used, free = self.get_drive_data(d)
+            return used / total
+
+        return min(self._drives, key=drive_percentage)
 
 
 def create_volume(drive: pathlib.Path, name: str, mod: int = 0o777) -> pathlib.Path:

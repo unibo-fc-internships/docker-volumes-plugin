@@ -1,12 +1,21 @@
+import string
+
 import flask
-from ._log import *
 from .protocol import *
 from .volumes import *
-import typing
+from typing import Type
 
 
 app = flask.Flask(__name__)
 drive_selector = FirstDriveSelector()
+
+AVAILABLE_DRIVE_SELECTORS: dict[string, Type[DriveSelector]] = {
+    "first": FirstDriveSelector,
+    "selected": SelectedDriveSelector,
+    "lowest_usage": LowestUsedSpaceDriveSelector,
+    "highest_space": HighestAvailableSpaceDriveSelector,
+    "lowest_percentage": LowestPercentageAvailableDriveSelector
+}
 
 
 def _override_drive_selector(selector: DriveSelector):
@@ -58,7 +67,24 @@ def volumes_protocol(input: type, output: type):
 def on_volume_create(req):
     logging.info("Request to create volume %s", req.name)
     name = req.name
-    drive = drive_selector.select_drive_for_new_volume(name)
+
+    drive_selector_options = {}
+    drive_selector_local = drive_selector
+
+    if req.opts and "volume_driver" in req.opts:
+        logging.info("Overriding drive selector with %s", req.opts["volume_driver"])
+        if not req.opts["volume_driver"] in AVAILABLE_DRIVE_SELECTORS:
+            raise RuntimeError(f"Volume driver {req.opts['volume_driver']} do not exists")
+        drive_selector_local = AVAILABLE_DRIVE_SELECTORS[req.opts["volume_driver"]]()
+
+    if isinstance(drive_selector_local, SelectedDriveSelector):
+        if not req.opts or "drive" not in req.opts:
+            raise RuntimeError("Selected volume driver requires a drive")
+        drive_selector_options["drive"] = req.opts["drive"]
+
+    logging.info("Using drive selector %s", drive_selector_local.__class__.__name__)
+    drive = drive_selector_local.select_drive_for_new_volume(name, **drive_selector_options)
+
     if drive is None:
         raise RuntimeError("No drive available")
     path = create_volume(drive, name)
