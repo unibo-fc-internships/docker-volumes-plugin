@@ -25,9 +25,10 @@ jobs:
         python-version: "3.10"
     - name: Install dependencies
       run: |
-        sudo chmod ugo+rwx /var/lib/docker/x-drives
         python -m pip install --upgrade pip
         if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
     - name: Run tests
       run: |
+        sudo mkdir /var/lib/docker/x-drives
+        sudo chmod ugo+rwx /var/lib/docker/x-drives
         sudo python -m unittest discover -s tests -p "*.py"
