@@ -29,4 +29,4 @@ jobs:
         if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
     - name: Run tests
       run: |
-        python -m unittest discover -s tests -p "*.py"
+        sudo python -m unittest discover -s tests -p "*.py"
