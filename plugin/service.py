@@ -9,7 +9,7 @@ app = flask.Flask(__name__)
 drive_selector = FirstDriveSelector()
 
 
-def _override_drive_selector(selector: DriveSelector):
+def override_drive_selector(selector: DriveSelector):
     global drive_selector
     drive_selector = selector
 

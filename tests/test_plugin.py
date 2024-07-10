@@ -1,5 +1,5 @@
 import unittest
-import plugin
+import plugin.service as service
 import plugin.volumes as volumes
 import pathlib
 import tempfile
@@ -16,7 +16,7 @@ def setUpModule():
     ROOT.mkdir()
     for drive in DRIVES:
         drive.mkdir()
-    plugin._override_drive_selector(volumes.FirstDriveSelector(DRIVES))
+    service.override_drive_selector(volumes.FirstDriveSelector(DRIVES))
 
 
 def tearDownModule():
@@ -26,9 +26,9 @@ def tearDownModule():
 class AbstractPluginTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.ctx = plugin.app.app_context()
+        cls.ctx = service.app.app_context()
         cls.ctx.push()
-        cls.client = plugin.app.test_client()
+        cls.client = service.app.test_client()
 
     @classmethod
     def tearDownClass(cls):
