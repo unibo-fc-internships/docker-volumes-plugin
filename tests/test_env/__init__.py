@@ -2,13 +2,14 @@ import logging
 import shlex
 import subprocess
 import sys
-import time
 import unittest
 import string
 from pathlib import Path
 from subprocess import CompletedProcess
 import yaml
 from faker import Faker
+
+faker = Faker()
 
 logger = logging.getLogger()
 logger.level = logging.DEBUG
@@ -63,8 +64,6 @@ class DockerService:
             capture_output=True,
             cwd=PATH_DOCKER_COMPOSE.parent
         )
-        print(process.stdout.decode('UTF-8'))
-        print(process.stderr.decode('UTF-8'))
         return process
 
     def up(self):
@@ -141,7 +140,7 @@ class BasePluginInstalledTest(BasePluginTest):
 class BaseVolumeCreatedTest(BasePluginInstalledTest):
     def setUp(self):
         super().setUp()
-        self.volume = Faker().first_name()
+        self.volume = faker.first_name()
         create = docker_service.dinds[0].exec(f"docker volume create -d {PLUGIN} {self.volume}")
         self.assertEqual(create.returncode, 0, f"Failed to create volume {self.volume} : {create.stderr.decode('UTF-8')}")
 
@@ -154,7 +153,7 @@ class BaseVolumeMountedTest(BaseVolumeCreatedTest):
 
     def setUp(self):
         super().setUp()
-        self.container_name = Faker().first_name()
+        self.container_name = faker.first_name()
         for dind in docker_service.dinds:
             dind.exec(f"docker run -d --rm --name {self.container_name} -v {self.volume}:/data alpine tail -f /dev/null").check_returncode()
 
@@ -187,13 +186,13 @@ class VolumeTest(BaseVolumeCreatedTest):
             self.assert_docker_instance_has_not_volume(dind, self.volume)
 
     def test_mount(self):
-        container_name = Faker().first_name()
+        container_name = faker.first_name()
         for dind in docker_service.dinds:
             mount = dind.exec(f"docker run -d --rm --name {container_name} -v {self.volume}:/data alpine")
             self.assertEqual(0, mount.returncode, f"Failed to mount volume {self.volume} in {dind}")
 
     def test_delete_mounted(self):
-        container_name = Faker().first_name()
+        container_name = faker.first_name()
 
         docker_service.dinds[0].exec(f"docker run --rm -d --name {container_name} -v {self.volume}:/data alpine tail -f /dev/null").check_returncode()
 
@@ -207,9 +206,8 @@ class VolumeTest(BaseVolumeCreatedTest):
 class DataSyncTest(BaseVolumeMountedTest):
 
     def test_created_file_exists_on_all(self):
-        filename = Faker().first_name()
+        filename = faker.first_name()
 
-        logging.info(f"Create file {filename} on volume {self.volume}")
         docker_service.dinds[0].exec(f"docker run -v {self.volume}:/data alpine touch /data/{filename}").check_returncode()
 
         for dind in docker_service.dinds:
@@ -218,8 +216,8 @@ class DataSyncTest(BaseVolumeMountedTest):
             self.assertIn(filename, ls.stdout.decode('UTF-8'))
 
     def test_write_in_file_and_read_content_everywhere(self):
-        filename = Faker().first_name()
-        content = Faker().sentence()
+        filename = faker.first_name()
+        content = faker.sentence()
 
         docker_service.dinds[0].exec(f"docker run -v {self.volume}:/data alpine sh -c 'echo \"{content}\" > /data/{filename}'").check_returncode()
 
@@ -229,7 +227,7 @@ class DataSyncTest(BaseVolumeMountedTest):
             self.assertEqual(cat.stdout.decode('UTF-8').strip(), content, f"Content mismatch in {dind}")
 
     def test_deletefile(self):
-        filename = Faker().first_name()
+        filename = faker.first_name()
 
         docker_service.dinds[0].exec(f"docker run -v {self.volume}:/data alpine touch /data/{filename}").check_returncode()
 
