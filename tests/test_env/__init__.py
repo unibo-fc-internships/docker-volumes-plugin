@@ -64,6 +64,8 @@ class DockerService:
             capture_output=True,
             cwd=PATH_DOCKER_COMPOSE.parent
         )
+        if process.returncode != 0:
+            logging.error(process.stderr.decode('UTF-8'))
         return process
 
     def up(self):
