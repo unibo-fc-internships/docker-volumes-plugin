@@ -1,25 +1,22 @@
 import pathlib
 import os
 import shutil
+import time
 import typing
 from plugin._log import logging
 import plugin.nfs as nfs
 import uuid
 import re
 
-
 _REGEX_UUID = r"[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}"
 _PATTERN_UUID = re.compile(f"^{_REGEX_UUID}$")
 _PATTERN_VOLUME_PATH = re.compile(f"^(.+?)-({_REGEX_UUID})$")
 
-
 ROOT = nfs.ROOT
 DRIVES = [mount.local_path for mount in nfs.NFS_MOUNTS]
 
-
 if not DRIVES:
     DRIVES = [ROOT / "drive"]
-
 
 logging.debug("Environment: {%s}", ", ".join([f"{k}={v}" for k, v in os.environ.items()]))
 logging.info("ROOT='%s'", str(ROOT))
@@ -78,14 +75,20 @@ class VolumeDescriptor:
         name = name.replace(".lock", "")
         return name
 
-    def mount(self, container_id: str) -> pathlib.Path:
+    def mount(self, container_id: str) -> pathlib.Path | None:
+        start = time.time()
         lock = self.lock_file(container_id)
+        logging.info("Time to init lock file: %s", time.time() - start)
+        start = time.time()
         if lock.exists():
             return None
+        logging.info("Time to check lock file: %s", time.time() - start)
+        start = time.time()
         lock.touch(exist_ok=False)
+        logging.info("Time to create lock file: %s", time.time() - start)
         return lock
 
-    def unmount(self, container_id: str) -> pathlib.Path:
+    def unmount(self, container_id: str) -> pathlib.Path | None:
         lock = self.lock_file(container_id)
         if not lock.exists():
             return None
@@ -128,7 +131,7 @@ class DriveSelector:
         self._drives = [pathlib.Path(path) for path in drives]
         assert self._drives, f"No drives provided"
         self._drives.sort()
-    
+
     def select_drive_for_new_volume(self, name: str) -> pathlib.Path:
         ...
 
@@ -148,15 +151,15 @@ class FirstDriveSelector(DriveSelector):
 
     def select_drive_for_new_volume(self, name: str) -> pathlib.Path:
         return self._first_drive
-    
-    def find_drive_of_volume(self, name: str) -> pathlib.Path:
+
+    def find_drive_of_volume(self, name: str) -> pathlib.Path | None:
         try:
             return VolumeDescriptor.find_one_with_name(self._first_drive, name).drive
         except KeyError:
             return None
 
 
-def create_volume(drive: pathlib.Path, name: str, mod: int = 0o777) -> pathlib.Path:
+def create_volume(drive: pathlib.Path, name: str, mod: int = 0o777) -> pathlib.Path | None:
     collisions = list(VolumeDescriptor.find_all_with_name(drive, name))
     if collisions:
         return None
@@ -178,8 +181,12 @@ def remove_volume(drive: pathlib.Path, name: str) -> bool:
 
 def mount_volume(drive: pathlib.Path, name: str, id: str) -> bool:
     try:
+        start = time.time()
         volume = VolumeDescriptor.find_one_with_name(drive, name)
+        logging.info("Time to find volume: %s", time.time() - start)
+        start = time.time()
         result = volume.mount(id)
+        logging.info("Time to mount volume(bis): %s", time.time() - start)
         return result is not None and result.exists()
     except KeyError:
         return False
@@ -194,7 +201,7 @@ def unmount_volume(drive: pathlib.Path, name: str, id: str) -> bool:
         return False
 
 
-def get_data_dir_for_volume(drive: pathlib.Path, name: str) -> pathlib.Path:
+def get_data_dir_for_volume(drive: pathlib.Path, name: str) -> pathlib.Path | None:
     try:
         return VolumeDescriptor.find_one_with_name(drive, name).data_dir
     except KeyError:

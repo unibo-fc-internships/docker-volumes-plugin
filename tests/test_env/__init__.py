@@ -2,6 +2,7 @@ import logging
 import shlex
 import subprocess
 import sys
+import time
 import unittest
 import string
 from pathlib import Path
@@ -89,7 +90,6 @@ class DockerService:
     def install_plugin(self, plugin=None):
         if plugin is None:
             plugin = PLUGIN
-
         return self.exec_all(f"docker plugin install {plugin} --disable --grant-all-permissions")
 
     def conf_plugin(self, mounts: string = None, plugin=PLUGIN):
@@ -143,7 +143,9 @@ class BaseVolumeCreatedTest(BasePluginInstalledTest):
     def setUp(self):
         super().setUp()
         self.volume = faker.first_name()
+        start = time.time()
         create = docker_service.dinds[0].exec(f"docker volume create -d {PLUGIN} {self.volume}")
+        logging.info(f"Creation took {time.time() - start} seconds")
         self.assertEqual(create.returncode, 0, f"Failed to create volume {self.volume} : {create.stderr.decode('UTF-8')}")
 
     def tearDown(self):
@@ -157,7 +159,9 @@ class BaseVolumeMountedTest(BaseVolumeCreatedTest):
         super().setUp()
         self.container_name = faker.first_name()
         for dind in docker_service.dinds:
+            start = time.time()
             dind.exec(f"docker run -d --rm --name {self.container_name} -v {self.volume}:/data alpine tail -f /dev/null").check_returncode()
+            logging.info(f"Mounting took {time.time() - start} seconds")
 
     def tearDown(self):
         super().tearDown()
@@ -209,7 +213,6 @@ class DataSyncTest(BaseVolumeMountedTest):
 
     def test_created_file_exists_on_all(self):
         filename = faker.first_name()
-
         docker_service.dinds[0].exec(f"docker run -v {self.volume}:/data alpine touch /data/{filename}").check_returncode()
 
         for dind in docker_service.dinds:

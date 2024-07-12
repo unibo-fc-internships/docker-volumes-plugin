@@ -32,6 +32,7 @@ services:
       - ./logs/docker1:/var/log/
     networks:
       - my_network
+      - registry
     depends_on:
       - storage1
       - storage2
@@ -46,6 +47,7 @@ services:
       - ./logs/docker2:/var/log/
     networks:
       - my_network
+      - registry
     depends_on:
       - storage1
       - storage2
@@ -58,3 +60,4 @@ volumes:
 
 networks:
   my_network: {}
+  registry: {}

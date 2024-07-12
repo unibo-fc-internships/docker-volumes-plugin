@@ -1,3 +1,5 @@
+import time
+
 import flask
 from ._log import *
 from .protocol import *
@@ -90,8 +92,10 @@ def on_volume_mount(req):
     drive = drive_selector.find_drive_of_volume(req.name)
     if drive is None:
         raise RuntimeError(f"Volume {req.name} not found")
+    start = time.time()
     if not mount_volume(drive, req.name, req.id):
         raise RuntimeError(f"Impossible to mount volume {req.name}")
+    logging.info("Time to mount volume: %s", time.time() - start)
     logging.info("Volume %s mounted by %s", req.name, req.id)
     return VolumeMountResponse(mountpoint=get_data_dir_for_volume(drive, req.name))
 
