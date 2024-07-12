@@ -9,6 +9,8 @@ from subprocess import CompletedProcess
 import yaml
 from faker import Faker
 
+RETRY_COUNT = 3
+
 faker = Faker()
 
 logger = logging.getLogger()
@@ -77,7 +79,17 @@ class DockerService:
 
     def exec(self, command: string, container: string) -> CompletedProcess[bytes]:
         logging.info(f"Run '{command}' in {container}")
-        return self.call_docker_compose(f"exec {container} {command}")
+
+        count_tries = 0
+        while count_tries < RETRY_COUNT:
+            run = self.call_docker_compose(f"exec {container} {command}")
+            count_tries += 1
+            if run.returncode != 0 and "Client.Timeout" in str(run.stderr):
+                logging.info("Command failed")
+            else:
+                break
+
+        return run
 
     def exec_all(self, command: string):
         res = 0
