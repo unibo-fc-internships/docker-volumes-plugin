@@ -53,8 +53,18 @@ services:
       test: docker ps || exit 1
 
 volumes:
-  data1: {}
-  data2: {}
+  data1:
+    driver: local
+    driver_opts:
+      o: "size=10M"
+      device: tmpfs
+      type: tmpfs
+  data2:
+    driver: local
+    driver_opts:
+      o: "size=20M"
+      device: tmpfs
+      type: tmpfs
 
 networks:
   my_network: {}
