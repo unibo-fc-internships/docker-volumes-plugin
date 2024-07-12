@@ -71,15 +71,15 @@ def on_volume_create(req):
     drive_selector_options = {}
     drive_selector_local = drive_selector
 
-    if req.opts and "volume_driver" in req.opts:
-        logging.info("Overriding drive selector with %s", req.opts["volume_driver"])
-        if not req.opts["volume_driver"] in AVAILABLE_DRIVE_SELECTORS:
-            raise RuntimeError(f"Volume driver {req.opts['volume_driver']} do not exists")
-        drive_selector_local = AVAILABLE_DRIVE_SELECTORS[req.opts["volume_driver"]]()
+    if req.opts and "drive_selector" in req.opts:
+        logging.info("Overriding drive selector with %s", req.opts["drive_selector"])
+        if not req.opts["drive_selector"] in AVAILABLE_DRIVE_SELECTORS:
+            raise RuntimeError(f"Volume driver {req.opts['drive_selector']} do not exists")
+        drive_selector_local = AVAILABLE_DRIVE_SELECTORS[req.opts["drive_selector"]]()
 
     if isinstance(drive_selector_local, SelectedDriveSelector):
         if not req.opts or "drive" not in req.opts:
-            raise RuntimeError("Selected volume driver requires a drive")
+            raise RuntimeError("Selected driver selector requires a given drive")
         drive_selector_options["drive"] = req.opts["drive"]
 
     logging.info("Using drive selector %s", drive_selector_local.__class__.__name__)

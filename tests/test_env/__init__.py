@@ -269,19 +269,19 @@ class DriveSelectorsTest(BasePluginInstalledTest):
     def test_first_drive_selector(self):
         self.volume = Faker().first_name()
 
-        self.create_volume(self.volume, volume_driver="first").check_returncode()
+        self.create_volume(self.volume, drive_selector="first").check_returncode()
 
         self.remove_volume(self.volume).check_returncode()
 
     def test_selected_drive_missing_param_selector(self):
         self.volume = Faker().first_name()
 
-        self.assertNotEqual(0, self.create_volume(self.volume, volume_driver="selected").returncode)
+        self.assertNotEqual(0, self.create_volume(self.volume, drive_selector="selected").returncode)
 
     def test_selected_drive_selector(self):
         for storage in docker_service.storages:
             self.volume = Faker().first_name()
-            self.create_volume(self.volume, volume_driver="selected", drive=f"{storage.name}:_").check_returncode()
+            self.create_volume(self.volume, drive_selector="selected", drive=f"{storage.name}:_").check_returncode()
             ls = docker_service.exec("ls /data", storage.name)
             self.assertIn(self.volume, ls.stdout.decode('UTF-8'))
 
@@ -292,7 +292,7 @@ class DriveSelectorsTest(BasePluginInstalledTest):
         docker_service.storages[0].exec("dd if=/dev/zero of=/data/filler bs=1M count=5").check_returncode()
 
         self.volume = Faker().first_name()
-        self.create_volume(self.volume, volume_driver="lowest_usage").check_returncode()
+        self.create_volume(self.volume, drive_selector="lowest_usage").check_returncode()
 
         check_storage2 = docker_service.storages[1].exec("ls /data")
         check_storage2.check_returncode()
@@ -310,7 +310,7 @@ class DriveSelectorsTest(BasePluginInstalledTest):
         docker_service.storages[1].exec("dd if=/dev/zero of=/data/filler bs=1M count=5").check_returncode()
 
         self.volume = Faker().first_name()
-        self.create_volume(self.volume, volume_driver="highest_space").check_returncode()
+        self.create_volume(self.volume, drive_selector="highest_space").check_returncode()
 
         check_storage2 = docker_service.storages[1].exec("ls /data")
         check_storage2.check_returncode()
@@ -328,7 +328,7 @@ class DriveSelectorsTest(BasePluginInstalledTest):
         docker_service.storages[1].exec("dd if=/dev/zero of=/data/filler bs=1M count=5").check_returncode()
 
         self.volume = Faker().first_name()
-        self.create_volume(self.volume, volume_driver="lowest_percentage").check_returncode()
+        self.create_volume(self.volume, drive_selector="lowest_percentage").check_returncode()
 
         check_storage1 = docker_service.storages[0].exec("ls /data")
         check_storage1.check_returncode()
@@ -344,7 +344,7 @@ class DriveSelectorsTest(BasePluginInstalledTest):
     def test_unexisting_drive_selector(self):
         self.volume = Faker().first_name()
 
-        create = self.create_volume(self.volume, volume_driver=Faker().first_name())
+        create = self.create_volume(self.volume, drive_selector=Faker().first_name())
         self.assertNotEqual(0, create.returncode)
 
 
