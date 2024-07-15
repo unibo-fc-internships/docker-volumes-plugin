@@ -51,7 +51,7 @@ jobs:
       env:
         API_TOKEN: ${{ secrets.DOCKER_HUB_API_TOKEN }}
       run: |
-        make delete_test
+        make delete_test API_TOKEN=$API_TOKEN
 
     - name: Build Plugin
       run: |
