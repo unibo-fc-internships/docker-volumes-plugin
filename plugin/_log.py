@@ -1,4 +1,5 @@
 import logging
+import os
 from pathlib import Path
 
 
@@ -6,7 +7,7 @@ __all__ = ['file_logs_handler']
 
 
 DEFAULT_LOG_DIR = Path("/var/log")
-DEFAULT_LOG_FILE = DEFAULT_LOG_DIR / "volumes-on-paths.log"
+DEFAULT_LOG_FILE = DEFAULT_LOG_DIR / os.getenv("PLUGIN_NAME_SHORT")
 
 
 logging.root.addHandler(logging.StreamHandler())

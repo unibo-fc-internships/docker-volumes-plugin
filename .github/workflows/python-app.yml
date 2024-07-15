@@ -23,13 +23,36 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.10"
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+
+    - name : login dockerhub
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      run : |
+        docker login -u francoisjn -p $DOCKER_PASSWORD
+
+    - name: publish test version
+      run: |
+          make publish_test
+
     - name: Run tests
       run: |
         sudo chmod ugo+rwx /var/lib/docker 
         sudo mkdir /var/lib/docker/x-drives
         sudo chmod ugo+rwx /var/lib/docker/x-drives
+        make config
         python -m unittest discover -s tests -p "*.py"
+
+    - name: Delete test version
+      env:
+        API_TOKEN: ${{ secrets.DOCKER_HUB_API_TOKEN }}
+      run: |
+        make delete_test API_TOKEN=$API_TOKEN
+
+    - name: Build Plugin
+      run: |
+        make publish

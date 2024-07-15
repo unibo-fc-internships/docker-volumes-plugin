@@ -1,11 +1,17 @@
-PLUGIN_NAME = francoisjn/volumes-on-paths
+PLUGIN_NAME = francoisjn/nfs-volumes
+PLUGIN_NAME_SHORT = nfs-volumes
 PLUGIN_TAG ?= latest
 OUTPUT_DIR ?= ./.plugin
-CONTAINER_NAME = container-gciatto-volumes-on-paths-latest
+CONTAINER_NAME = container-francoisjn-nfs-volumes
 # https://linux.die.net/man/5/nfs
-NFS_MOUNT ?= my_server:/shared_folder /local_folder udp,hard,ac
+NFS_MOUNT ?= localhost:/
 
 all: clean rootfs create enable
+publish: clean config rootfs create push
+
+publish_test: clean config
+publish_test: export PLUGIN_TAG=test
+publish_test: rootfs create push
 
 clean:
 	@echo "### rm ${OUTPUT_DIR}"
@@ -16,9 +22,15 @@ config:
 	@mkdir -p ${OUTPUT_DIR}
 	@cp config.json ${OUTPUT_DIR}/
 
-rootfs: config
+generate_dotenv:
+	@echo "### Configure .env file"
+	@echo "PLUGIN_NAME=${PLUGIN_NAME}" > .env
+	@echo "PLUGIN_NAME_SHORT=${PLUGIN_NAME_SHORT}" >> .env
+	@echo "PLUGIN_TAG=${PLUGIN_TAG}" >> .env
+
+rootfs: generate_dotenv
 	@echo "### docker build: rootfs image with"
-	@docker build -t ${PLUGIN_NAME}:rootfs .
+	@docker build --build-arg PLUGIN_NAME=${PLUGIN_NAME} --build-arg PLUGIN_NAME_SHORT=${PLUGIN_NAME_SHORT} -t ${PLUGIN_NAME}:rootfs .
 	@echo "### create rootfs directory in ${OUTPUT_DIR}/rootfs"
 	@mkdir -p ${OUTPUT_DIR}/rootfs
 	@docker create --name ${CONTAINER_NAME} ${PLUGIN_NAME}:rootfs
@@ -41,7 +53,7 @@ enable:
 
 log_plugin:
 	@echo "### cat logs of plugin ${PLUGIN_NAME}:${PLUGIN_TAG}"
-	@cat /var/log/volumes-on-paths.log
+	@cat /var/log/${PLUGIN_NAME_SHORT}.log
 
 log_dockerd:
 	@echo "### cat logs of docker daemon"
@@ -54,6 +66,9 @@ disable:
 push:
 	@echo "### push plugin ${PLUGIN_NAME}:${PLUGIN_TAG}"
 	@docker plugin push ${PLUGIN_NAME}:${PLUGIN_TAG}
+
+delete_test:
+	@curl -H "Authorization: JWT ${API_TOKEN}" -X DELETE https://hub.docker.com/v2/repositories/${PLUGIN_NAME}/tags/test/
 
 #set_usable_paths: create
 #    @echo "### setting var USABLE_PATHS=$(path)"

@@ -4,3 +4,4 @@ __pycache__/
 .idea/
 .plugin/
 .python-version
+/.env
