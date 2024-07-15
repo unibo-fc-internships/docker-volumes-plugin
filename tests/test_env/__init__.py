@@ -27,6 +27,8 @@ logger.addHandler(stream_handler)
 
 if not os.environ.get('PLUGIN_NAME'):
     raise ValueError('PLUGIN_NAME is not set in .env file : ' + str(os.environ))
+if not os.environ.get('PLUGIN_NAME_SHORT'):
+    raise ValueError('PLUGIN_NAME_SHORT is not set in .env file : ' + str(os.environ))
 
 PLUGIN = os.getenv("PLUGIN_NAME")
 
