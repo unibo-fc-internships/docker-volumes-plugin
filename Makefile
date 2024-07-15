@@ -21,11 +21,14 @@ config:
 	@echo "### copy config.json to ${OUTPUT_DIR}/"
 	@mkdir -p ${OUTPUT_DIR}
 	@cp config.json ${OUTPUT_DIR}/
+
+generate_dotenv:
 	@echo "### Configure .env file"
 	@echo "PLUGIN_NAME=${PLUGIN_NAME}" > .env
 	@echo "PLUGIN_NAME_SHORT=${PLUGIN_NAME_SHORT}" >> .env
+	@echo "PLUGIN_TAG=${PLUGIN_TAG}" >> .env
 
-rootfs:
+rootfs: generate_dotenv
 	@echo "### docker build: rootfs image with"
 	@docker build --build-arg PLUGIN_NAME=${PLUGIN_NAME} --build-arg PLUGIN_NAME_SHORT=${PLUGIN_NAME_SHORT} -t ${PLUGIN_NAME}:rootfs .
 	@echo "### create rootfs directory in ${OUTPUT_DIR}/rootfs"

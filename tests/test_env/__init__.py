@@ -29,8 +29,10 @@ if not os.environ.get('PLUGIN_NAME'):
     raise ValueError('PLUGIN_NAME is not set in .env file : ' + str(os.environ))
 if not os.environ.get('PLUGIN_NAME_SHORT'):
     raise ValueError('PLUGIN_NAME_SHORT is not set in .env file : ' + str(os.environ))
+if not os.environ.get('PLUGIN_TAG'):
+    raise ValueError('PLUGIN_TAG is not set in .env file : ' + str(os.environ))
 
-PLUGIN = os.getenv("PLUGIN_NAME")
+PLUGIN = os.getenv("PLUGIN_NAME") + ":" + os.getenv("PLUGIN_TAG")
 
 PATH_DOCKER_COMPOSE = Path(__file__).parent / "docker-compose.yml"
 SPEC_DOCKER_COMPOSE = yaml.safe_load(PATH_DOCKER_COMPOSE.read_text())
@@ -116,7 +118,7 @@ class DockerService:
         if plugin is None:
             plugin = PLUGIN
 
-        return self.exec_all(f"docker plugin install {plugin}:test --disable --grant-all-permissions")
+        return self.exec_all(f"docker plugin install {plugin} --disable --grant-all-permissions")
 
     def conf_plugin(self, mounts: string = None, plugin=PLUGIN):
         if mounts is None:
