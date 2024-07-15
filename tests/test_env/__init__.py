@@ -11,7 +11,7 @@ import yaml
 from faker import Faker
 from dotenv import load_dotenv
 
-load_dotenv('../.env')
+load_dotenv(Path(__file__).parent.parent.parent / '.env')
 
 RETRY_COUNT = 3
 
