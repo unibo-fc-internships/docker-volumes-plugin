@@ -7,7 +7,11 @@ CONTAINER_NAME = container-francoisjn-nfs-volumes
 NFS_MOUNT ?= localhost:/
 
 all: clean rootfs create enable
-publish: clean rootfs create push
+publish: clean config rootfs create push
+
+publish_test: clean config
+publish_test: export PLUGIN_TAG=test
+publish_test: rootfs create push
 
 clean:
 	@echo "### rm ${OUTPUT_DIR}"
@@ -21,7 +25,7 @@ config:
 	@echo "PLUGIN_NAME=${PLUGIN_NAME}" > .env
 	@echo "PLUGIN_NAME_SHORT=${PLUGIN_NAME_SHORT}" >> .env
 
-rootfs: config
+rootfs:
 	@echo "### docker build: rootfs image with"
 	@docker build --build-arg PLUGIN_NAME=${PLUGIN_NAME} --build-arg PLUGIN_NAME_SHORT=${PLUGIN_NAME_SHORT} -t ${PLUGIN_NAME}:rootfs .
 	@echo "### create rootfs directory in ${OUTPUT_DIR}/rootfs"

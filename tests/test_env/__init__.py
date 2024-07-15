@@ -116,7 +116,7 @@ class DockerService:
         if plugin is None:
             plugin = PLUGIN
 
-        return self.exec_all(f"docker plugin install {plugin} --disable --grant-all-permissions")
+        return self.exec_all(f"docker plugin install {plugin}:test --disable --grant-all-permissions")
 
     def conf_plugin(self, mounts: string = None, plugin=PLUGIN):
         if mounts is None:
