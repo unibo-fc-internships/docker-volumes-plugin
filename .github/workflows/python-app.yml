@@ -33,7 +33,7 @@ jobs:
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
       run : |
-        docker login -u francoisjn -p $DOCKER_HUB_PASSWORD
+        docker login -u francoisjn -p $DOCKER_PASSWORD
 
     - name: publish test version
       run: |
