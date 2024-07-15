@@ -32,6 +32,7 @@ jobs:
         sudo chmod ugo+rwx /var/lib/docker 
         sudo mkdir /var/lib/docker/x-drives
         sudo chmod ugo+rwx /var/lib/docker/x-drives
+        make config
         python -m unittest discover -s tests -p "*.py"
     - name: Build Plugin
       env:
