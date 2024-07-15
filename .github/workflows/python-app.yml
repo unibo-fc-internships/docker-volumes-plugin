@@ -31,7 +31,7 @@ jobs:
 
     - name : login dockerhub
       run : |
-        docker login -u francoisjn -p $DOCKER_PASSWORD
+        docker login -u francoisjn -p $DOCKER_HUB_PASSWORD
 
     - name: publish test version
       run: |
