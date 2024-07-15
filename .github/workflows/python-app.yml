@@ -37,7 +37,7 @@ jobs:
 
     - name: publish test version
       run: |
-          make publish-test
+          make publish_test
 
     - name: Run tests
       run: |
