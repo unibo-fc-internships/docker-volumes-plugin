@@ -49,7 +49,7 @@ jobs:
 
     - name: Delete test version
       env:
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+        API_TOKEN: ${{ secrets.DOCKER_HUB_API_TOKEN }}
       run: |
         make delete_test
 

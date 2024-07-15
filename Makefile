@@ -68,7 +68,7 @@ push:
 	@docker plugin push ${PLUGIN_NAME}:${PLUGIN_TAG}
 
 delete_test:
-	@curl -X DELETE -u francoisjn:$DOCKER_PASSWORD https://hub.docker.com/v2/repositories/$PLUGIN_NAME/tags/test/
+	@curl -X DELETE -H'{"Authorization": "Bearer ${API_TOKEN}"}' https://hub.docker.com/v2/repositories/${PLUGIN_NAME}/tags/test/
 
 #set_usable_paths: create
 #    @echo "### setting var USABLE_PATHS=$(path)"
