@@ -1,5 +1,6 @@
 FROM python:latest
-ENV PLUGIN_NAME volumes-on-paths
+ARG PLUGIN_NAME
+ENV PLUGIN_NAME=${PLUGIN_NAME}
 COPY ./requirements.txt /$PLUGIN_NAME/
 WORKDIR /$PLUGIN_NAME
 RUN pip install -r requirements.txt

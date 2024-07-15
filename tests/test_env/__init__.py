@@ -1,4 +1,5 @@
 import logging
+import os
 import shlex
 import subprocess
 import sys
@@ -8,6 +9,9 @@ from pathlib import Path
 from subprocess import CompletedProcess
 import yaml
 from faker import Faker
+from dotenv import load_dotenv
+
+load_dotenv('../.env')
 
 RETRY_COUNT = 3
 
@@ -20,7 +24,11 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
 
-PLUGIN = "francoisjn/volumes-on-paths:latest"
+
+if not os.environ.get('PLUGIN_NAME'):
+    raise ValueError('PLUGIN_NAME is not set in .env file : ' + str(os.environ))
+
+PLUGIN = os.getenv("PLUGIN_NAME")
 
 PATH_DOCKER_COMPOSE = Path(__file__).parent / "docker-compose.yml"
 SPEC_DOCKER_COMPOSE = yaml.safe_load(PATH_DOCKER_COMPOSE.read_text())

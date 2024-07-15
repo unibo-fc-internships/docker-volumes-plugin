@@ -1,7 +1,7 @@
 {
   "description": "Docker plugin for storing volumes on custom paths",
   "documentation": "https://example.com/docker/plugin",
-  "workdir": "/volumes-on-paths",
+  "workdir": "/nfs-volumes",
   "entrypoint": [
     "/usr/bin/bash",
     "./entrypoint.sh",
@@ -11,10 +11,10 @@
     "--app",
     "plugin.service",
     "run",
-    "--host=unix:///run/docker/plugins/volumes-on-paths.sock"
+    "--host=unix:///run/docker/plugins/nfs-volumes.sock"
   ],
   "interface": {
-    "socket": "volumes-on-paths.sock",
+    "socket": "nfs-volumes.sock",
     "types": [
       "docker.volumedriver/1.0"
     ]

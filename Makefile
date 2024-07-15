@@ -1,11 +1,12 @@
-PLUGIN_NAME = francoisjn/volumes-on-paths
+PLUGIN_NAME = francoisjn/nfs-volumes
 PLUGIN_TAG ?= latest
 OUTPUT_DIR ?= ./.plugin
-CONTAINER_NAME = container-gciatto-volumes-on-paths-latest
+CONTAINER_NAME = container-francoisjn-nfs-volumes
 # https://linux.die.net/man/5/nfs
 NFS_MOUNT ?= my_server:/shared_folder /local_folder udp,hard,ac
 
 all: clean rootfs create enable
+publish: clean rootfs create push
 
 clean:
 	@echo "### rm ${OUTPUT_DIR}"
@@ -15,10 +16,12 @@ config:
 	@echo "### copy config.json to ${OUTPUT_DIR}/"
 	@mkdir -p ${OUTPUT_DIR}
 	@cp config.json ${OUTPUT_DIR}/
+	@echo "### Configure .env file"
+	@echo "PLUGIN_NAME=${PLUGIN_NAME}" > .env
 
 rootfs: config
 	@echo "### docker build: rootfs image with"
-	@docker build -t ${PLUGIN_NAME}:rootfs .
+	@docker build --build-arg PLUGIN_NAME=${PLUGIN_NAME} -t ${PLUGIN_NAME}:rootfs .
 	@echo "### create rootfs directory in ${OUTPUT_DIR}/rootfs"
 	@mkdir -p ${OUTPUT_DIR}/rootfs
 	@docker create --name ${CONTAINER_NAME} ${PLUGIN_NAME}:rootfs
@@ -41,7 +44,7 @@ enable:
 
 log_plugin:
 	@echo "### cat logs of plugin ${PLUGIN_NAME}:${PLUGIN_TAG}"
-	@cat /var/log/volumes-on-paths.log
+	@cat /var/log/${PLUGIN_NAME}.log
 
 log_dockerd:
 	@echo "### cat logs of docker daemon"
