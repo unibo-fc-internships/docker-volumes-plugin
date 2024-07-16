@@ -9,4 +9,3 @@ tests/
 requirements-dev.txt
 README.md
 .github/
-.env
