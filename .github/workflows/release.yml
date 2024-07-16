@@ -1,0 +1,47 @@
+name: Release Plugin
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - release/*
+
+jobs:
+  publish:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract version from branch name
+        run: |
+          BRANCH_NAME=${GITHUB_REF#refs/heads/releases/}
+          VERSION=$(echo $BRANCH_NAME | sed 's/^releases\///')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Publish plugin image
+        env:
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+        run: |
+          docker login -u francoisjn -p $DOCKER_PASSWORD
+          make publish PLUGIN_TAG=$VERSION
+
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          response=$(curl --request POST \
+            --url https://api.github.com/repos/${GITHUB_REPOSITORY}/releases \
+            --header 'authorization: Bearer $GITHUB_TOKEN' \
+            --header 'content-type: application/json' \
+            --data '{
+              "tag_name": "$VERSION",
+              "name": "$VERSION",
+              "body": $(cat CHANGELOG.md),
+              "draft": false,
+              "prerelease": false
+            }')          
+          
+          # Extract the release ID from the response
+          RELEASE_ID=$(echo $response | jq -r '.id')
+          echo "Created release with ID: $RELEASE_ID"
