@@ -6,3 +6,7 @@ tests/
 .gitignore
 .gitattributes
 .python-version
+requirements-dev.txt
+README.md
+.github/
+.env
