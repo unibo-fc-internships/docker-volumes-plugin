@@ -9,10 +9,6 @@ NFS_MOUNT ?= localhost:/
 all: clean rootfs create enable
 publish: clean config rootfs create push
 
-publish_test: clean config
-publish_test: export PLUGIN_TAG=test
-publish_test: rootfs create push
-
 clean:
 	@echo "### rm ${OUTPUT_DIR}"
 	@rm -rf ${OUTPUT_DIR}
