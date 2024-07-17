@@ -28,20 +28,6 @@ jobs:
 
       - name: Create release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          response=$(curl --request POST \
-            --url https://api.github.com/repos/${GITHUB_REPOSITORY}/releases \
-            --header 'authorization: Bearer $GITHUB_TOKEN' \
-            --header 'content-type: application/json' \
-            --data '{
-              "tag_name": "$VERSION",
-              "name": "$VERSION",
-              "body": $(cat CHANGELOG.md),
-              "draft": false,
-              "prerelease": false
-            }')          
-          
-          # Extract the release ID from the response
-          RELEASE_ID=$(echo $response | jq -r '.id')
-          echo "Created release with ID: $RELEASE_ID"
+          gh release create "v${VERSION}" --notes-file CHANGELOG.md --title "Release v${VERSION}"
