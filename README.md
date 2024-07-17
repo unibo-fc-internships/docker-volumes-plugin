@@ -14,7 +14,7 @@ A Docker Volume Plugin to share volumes among Docker Swarm nodes using NFS.
 
 3. Set the remote NFS folder to be mounted:
     ```bash
-    make set NFS_MOUNT='SERVER_IP_OR_NAME:REMOTE_PATH LOCAL_PATH NFS_OPTIONS'
+    make set NFS_MOUNT='SERVER_IP_OR_NAME:REMOTE_PATH [NFS_OPTIONS]'
     ```
     - NFS options here: <https://linux.die.net/man/5/nfs>
 
@@ -43,7 +43,7 @@ A Docker Volume Plugin to share volumes among Docker Swarm nodes using NFS.
     ```
 2. Set the remote NFS folder to be mounted:
     ```bash
-    docker plugin set francoisjn/nfs-volume NFS_MOUNT='SERVER_IP_OR_NAME:REMOTE_PATH NFS_OPTIONS[; SERVER_IP_OR_NAME:REMOTE_PATH NFS_OPTIONS; ...]'
+    docker plugin set francoisjn/nfs-volume NFS_MOUNT='SERVER_IP_OR_NAME:REMOTE_PATH [NFS_OPTIONS][; SERVER_IP_OR_NAME:REMOTE_PATH [NFS_OPTIONS]; ...]'
     ```
 3. Enable the plugin:
     ```bash
