@@ -3,7 +3,7 @@ var dockerhub_username = process.env.DOCKER_HUB_USERNAME;
 var dockerhub_password = process.env.DOCKER_HUB_PASSWORD;
 
 var prepareCmd = `echo "${dockerhub_password}" | docker login --username "${dockerhub_username}" --password-stdin`;
-var publishCmd = "docker publish PLUGIN_TAG=\${nextRelease.version}"
+var publishCmd = "make publish PLUGIN_TAG=\${nextRelease.version}"
 
 if (dryRun) {
     publishCmd = publishCmd.replace(" publish ", " build ");
