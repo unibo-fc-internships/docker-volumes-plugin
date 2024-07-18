@@ -6,8 +6,9 @@ CONTAINER_NAME = container-francoisjn-nfs-volumes
 # https://linux.die.net/man/5/nfs
 NFS_MOUNT ?= localhost:/
 
-all: clean rootfs create enable
-publish: clean config rootfs create push
+build: clean config rootfs create
+all: build enable
+publish: build push
 
 clean:
 	@echo "### rm ${OUTPUT_DIR}"

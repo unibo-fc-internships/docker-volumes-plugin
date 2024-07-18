@@ -1,0 +1,44 @@
+name: deploy
+on:
+  workflow_call:
+  workflow_dispatch:
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+jobs:
+  release:
+    name: Release Plugin
+    concurrency:
+      group: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get All Tags
+        run: git fetch --tags -f
+
+      # not copied : install poetry, restore dev env, change default log level
+
+      - name: Get Node Version
+        id: get-node-version
+        run: echo "::set-output name=node-version::$(node -v)"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Release Plugin
+        shell: bash
+        run: |
+          npm install
+          npx semantic-release --branches `git branch --show-current`
+        env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          RELEASE_DRY_RUN: ${{ github.ref_name != 'master' && github.ref_name != 'main' }}
+        # set env vars for semantic-release

@@ -5,3 +5,4 @@ __pycache__/
 .plugin/
 .python-version
 /.env
+/node_modules/
