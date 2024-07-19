@@ -67,6 +67,6 @@ push:
 delete_test:
 	@curl -H "Authorization: JWT ${API_TOKEN}" -X DELETE https://hub.docker.com/v2/repositories/${PLUGIN_NAME}/tags/test/
 
-#set_usable_paths: create
-#    @echo "### setting var USABLE_PATHS=$(path)"
-#    @docker plugin set "${PLUGIN_NAME}:${PLUGIN_TAG}" USABLE_PATHS=$(path)
+test:
+	@echo "### test plugin ${PLUGIN_NAME}:${PLUGIN_TAG}"
+	@python -m unittest discover -s tests -p "*.py"

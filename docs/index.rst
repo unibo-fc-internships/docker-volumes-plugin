@@ -19,4 +19,4 @@ Contents
 
    Home <self>
    usage
-   api
+   for_developers
