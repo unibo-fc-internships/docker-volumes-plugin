@@ -38,9 +38,9 @@ To use the plugin, you can create a volume with the following command:
 
 .. code-block:: console
 
-   docker volume create -d francoisjn/nfs-volumes <volume_name>
+   docker volume create -d francoisjn/nfs-volumes [-o drive_selector=<selector_name>] <volume_name>
 
-You may also want to specify how to choose the server that will host your volume.
+With ``drive_selector`` option you can specify how to choose the server that will host your volume.
 
 There are different strategies to choose the server:
 
@@ -51,12 +51,6 @@ There are different strategies to choose the server:
 - ``lowest_usage``: Selects the server with the lowest usage.
 - ``highest_space``: Selects the server with the most available space.
 - ``lowest_percentage``: Selects the server with the lowest percentage of used space.
-
-You can specify the strategy when creating the volume:
-
-.. code-block:: console
-
-   docker volume create -d francoisjn -o drive_selector=<selector_name> <volume_name>
 
 For other , you can use plugins' volumes as any other.
 
