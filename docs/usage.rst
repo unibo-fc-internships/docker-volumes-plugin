@@ -18,7 +18,7 @@ Configure the plugin by setting the following environment variables:
 
    docker plugin set francoisjn/nfs-volumes NFS_MOUNT="<server_address>:<remote_path> [options] [; <other_server_addresses>:<remote_paths>; ...]"
 
-Remember to replace `<server_address>` and `<remote_path>` with the appropriate values.
+Remember to replace ``<server_address>`` and ``<remote_path>`` with the appropriate values.
 
 .. note::
     For options check https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/8/html/managing_file_systems/mounting-nfs-shares_managing-file-systems#frequently-used-nfs-mount-options_mounting-nfs-shares
@@ -44,13 +44,13 @@ You may also want to specify how to choose the server that will host your volume
 
 There are different strategies to choose the server:
 
-- `first`: Selects the first server in the list (not recommended).
-- `selected`: Allows you to specify the server that will host the volume, using `-o drive=<storage>`
-    - `storage` is the server address that will host the volume, with the path, `/` replaced by `_`.
-        example: `storage1.example.com:/path/to/volume` becomes `storage1.example.com:_path_to_volume`
-- `lowest_usage`: Selects the server with the lowest usage.
-- `highest_space`: Selects the server with the most available space.
-- `lowest_percentage`: Selects the server with the lowest percentage of used space.
+- ``first``: Selects the first server in the list (not recommended).
+- ``selected``: Allows you to specify the server that will host the volume, using ``-o drive=<storage>``
+    - ``storage`` is the server address that will host the volume, with the path, ``/`` replaced by ``_``.
+        example: ``storage1.example.com:/path/to/volume`` becomes ``storage1.example.com:_path_to_volume``
+- ``lowest_usage``: Selects the server with the lowest usage.
+- ``highest_space``: Selects the server with the most available space.
+- ``lowest_percentage``: Selects the server with the lowest percentage of used space.
 
 You can specify the strategy when creating the volume:
 

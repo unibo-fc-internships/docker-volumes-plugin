@@ -32,7 +32,7 @@ Setting up the development environment
 - PLUGIN_TAG: The tag of the plugin
 
 .. note::
-    Plugin will be publish on dockerhub with the name `PLUGIN_NAME`, make sure you're allowed to publish it (mandatory for tests).
+    Plugin will be publish on dockerhub with the name ``PLUGIN_NAME``, make sure you're allowed to publish it (mandatory for tests).
 
 3. Connect to dockerhub:
 
@@ -59,7 +59,7 @@ Building the project
 --------------------
 
 .. note::
-    The plugin will be built with the name `PLUGIN_NAME` and the tag `PLUGIN_TAG`.
+    The plugin will be built with the name ``PLUGIN_NAME`` and the tag ``PLUGIN_TAG``.
 
 To build the project, execute the following command:
 
@@ -74,7 +74,7 @@ To publish the plugin, execute the following command:
     make publish
 
 .. note::
-    The plugin will be published on dockerhub with the name `PLUGIN_NAME`, make sure you're allowed to publish it.
+    The plugin will be published on dockerhub with the name ``PLUGIN_NAME``, make sure you're allowed to publish it.
 
 To install locally the plugin, execute the following command:
 
@@ -83,7 +83,7 @@ To install locally the plugin, execute the following command:
     make all
 
 .. note::
-    `publish` and `all` commands will automatically build the plugin it.
+    ``publish`` and ``all`` commands will automatically build the plugin it.
 
 Debugging the plugin
 --------------------
@@ -99,4 +99,4 @@ You can get plugin's and docker daemon's logs respectively with the following co
     make log_dockerd
 
 .. note::
-    Plugin's logs during tests in DinD will be available under `/tests/logs` directory.
+    Plugin's logs during tests in DinD will be available under ``/tests/logs`` directory.
