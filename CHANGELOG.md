@@ -1,3 +1,14 @@
+## [1.1.2](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.1...1.1.2) (2024-07-19)
+
+### Dependency updates
+
+* **deps:** update dependency flask to v3.0.3 ([#24](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/24)) ([eacafb8](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/eacafb83f82ed7624e68c0bc3ad9db9011c4dc51))
+
+### Bug Fixes
+
+* only deploy when main ([b10e752](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/b10e752d65709fe05d91b88ac6e7cfeb9840aa76))
+* revert deploy condition ([0838a27](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/0838a27b10d146d9defea33c92d2dc69cfae625d))
+
 ## [1.1.1](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.0...1.1.1) (2024-07-19)
 
 ### Bug Fixes
