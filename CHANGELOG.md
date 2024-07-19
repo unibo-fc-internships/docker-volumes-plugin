@@ -1,3 +1,10 @@
+## [1.1.0](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.0.0...1.1.0) (2024-07-19)
+
+### Features
+
+* docker images versions specified ([a8e4653](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/a8e4653af40a1a163b819084e7aea8e54b370c41))
+* renovate ([df86709](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/df86709ca34ba5509a3d9583be74246f5d258561))
+
 ## [1.0.0](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/v0.1.0...1.0.0) (2024-07-18)
 
 ### ⚠ BREAKING CHANGES
