@@ -52,7 +52,7 @@ jobs:
         run: |
           make delete_test API_TOKEN=$API_TOKEN
   deploy:
-    if: github.ref_name != 'master' && github.ref_name != 'main'
+    if: github.ref_name == 'master' || github.ref_name == 'main'
     name: Deploy
     needs:
       - test
