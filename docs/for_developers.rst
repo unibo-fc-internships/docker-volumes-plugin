@@ -27,6 +27,7 @@ Setting up the development environment
     pip install -r requirements-dev.txt
 
 2. Configure the environment variables in the Makefile:
+
 - PLUGIN_NAME: The name of the plugin
 - PLUGIN_TAG: The tag of the plugin
 
@@ -56,6 +57,9 @@ Running the tests
 
 Building the project
 --------------------
+
+.. note::
+    The plugin will be built with the name `PLUGIN_NAME` and the tag `PLUGIN_TAG`.
 
 To build the project, execute the following command:
 
