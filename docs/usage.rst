@@ -57,5 +57,6 @@ You can specify the strategy when creating the volume:
    docker volume create -d francoisjn -o drive_selector=<selector_name> <volume_name>
 
 For other , you can use plugins' volumes as any other.
+
 .. warning::
     Deletions will be effective on all hosts, so be careful when deleting volumes.
