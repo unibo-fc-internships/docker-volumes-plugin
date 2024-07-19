@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.0...1.1.1) (2024-07-19)
+
+### Bug Fixes
+
+* release latest on dockerhub ([f152f0d](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/f152f0d087f1c33210520aa623384ba59ea4aba6))
+
 ## [1.1.0](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.0.0...1.1.0) (2024-07-19)
 
 ### Features
