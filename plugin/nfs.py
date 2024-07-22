@@ -60,7 +60,7 @@ NFS_MOUNTS = [
     NFSFilesystem.parse(mount.strip())
     for k in os.environ.keys()
     if k.startswith("NFS_MOUNT")
-    for mount in os.environ[k].split(';')
+    for mount in os.environ[k].split('|')
 ]
 
 if __name__ == "__main__":
