@@ -42,9 +42,11 @@ To use the plugin, you can create a volume with the following command:
 
 With ``drive_selector`` option you can specify how to choose the server that will host your volume.
 
+.. note::
+    Default drive selector is ``selected``.
+
 There are different strategies to choose the server:
 
-- ``first``: Selects the first server in the list (not recommended).
 - ``selected``: Allows you to specify the server that will host the volume, using ``-o drive=<storage>``
     - ``storage`` is the server address that will host the volume. As specified in the :ref:`installation` section.
         example: ``-o drive=storage1:/mnt/volume1``
