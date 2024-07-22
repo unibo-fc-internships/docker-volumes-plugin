@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.3...1.1.4) (2024-07-22)
+
+### Bug Fixes
+
+* HighestAvailableSpaceDriveSelector is now default ([1fe7c63](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/1fe7c637467aa5007a4a1a3946f10b056d8dfa57))
+* test_plugin no more use FirstDriveSelector ([6284863](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/6284863682720b25d058134665987ae605e22d49))
+
 ## [1.1.3](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.2...1.1.3) (2024-07-22)
 
 ### Bug Fixes
