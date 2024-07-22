@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.4...1.1.5) (2024-07-22)
+
+### Bug Fixes
+
+* use | as separator in config ([da01689](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/da01689da97143bb6019309ad6e65acad257bab5))
+* use | as separator in config ([e490430](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/e49043087f625ebcb0fabc21679a420977d1690b))
+
 ## [1.1.4](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.3...1.1.4) (2024-07-22)
 
 ### Bug Fixes
