@@ -16,7 +16,7 @@ def setUpModule():
     ROOT.mkdir()
     for drive in DRIVES:
         drive.mkdir()
-    service.override_drive_selector(volumes.FirstDriveSelector(DRIVES))
+    service.override_drive_selector(volumes.HighestAvailableSpaceDriveSelector(DRIVES))
 
 
 def tearDownModule():
