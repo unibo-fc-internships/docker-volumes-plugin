@@ -14,6 +14,7 @@ To use NFS volumes, first install it from docker hub:
 
 Configure the plugin by setting the following environment variables:
 
+.. _plugin-configuration:
 .. code-block:: console
 
    docker plugin set francoisjn/nfs-volumes NFS_MOUNT="<server_address>:<remote_path> [options] [; <other_server_addresses>:<remote_paths>; ...]"
@@ -46,8 +47,10 @@ There are different strategies to choose the server:
 
 - ``first``: Selects the first server in the list (not recommended).
 - ``selected``: Allows you to specify the server that will host the volume, using ``-o drive=<storage>``
-    - ``storage`` is the server address that will host the volume, with the path, ``/`` replaced by ``_``.
-        example: ``storage1.example.com:/path/to/volume`` becomes ``storage1.example.com:_path_to_volume``
+    - ``storage`` is the server address that will host the volume. As specified in the :ref:`plugin-configuration` section.
+        example: ``-o drive=storage1:/mnt/volume1``
+    - if ``storage`` is uncomplete, the plugin will search for the first server that starts with the given string.
+        example: ``-o drive=storage1`` will search for the first server that starts with ``storage1``.
 - ``lowest_usage``: Selects the server with the lowest usage.
 - ``highest_space``: Selects the server with the most available space.
 - ``lowest_percentage``: Selects the server with the lowest percentage of used space.
