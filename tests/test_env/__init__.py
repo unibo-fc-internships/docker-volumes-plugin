@@ -291,13 +291,6 @@ class DriveSelectorsTest(BasePluginInstalledTest):
 
         self.remove_volume(self.volume).check_returncode()
 
-    def test_first_drive_selector(self):
-        self.volume = Faker().first_name()
-
-        self.create_volume(self.volume, drive_selector="first").check_returncode()
-
-        self.remove_volume(self.volume).check_returncode()
-
     def test_selected_drive_missing_param_selector(self):
         self.volume = Faker().first_name()
 

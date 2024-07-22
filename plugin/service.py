@@ -7,10 +7,9 @@ from typing import Type
 
 
 app = flask.Flask(__name__)
-drive_selector = FirstDriveSelector()
+drive_selector = HighestAvailableSpaceDriveSelector()
 
 AVAILABLE_DRIVE_SELECTORS: dict[string, Type[DriveSelector]] = {
-    "first": FirstDriveSelector,
     "selected": SelectedDriveSelector,
     "lowest_usage": LowestUsedSpaceDriveSelector,
     "highest_space": HighestAvailableSpaceDriveSelector,

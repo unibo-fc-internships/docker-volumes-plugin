@@ -133,7 +133,7 @@ class DriveSelector:
     def select_drive_for_new_volume(self, name: str, **opts) -> pathlib.Path:
         ...
 
-    def find_drive_of_volume(self, name: str) -> pathlib.Path:
+    def find_drive_of_volume(self, name: str) -> pathlib.Path | None:
         volumes = list(v for v in self.all_volumes() if v[1] == name)
         if len(volumes) > 1:
             raise RuntimeError(f"Too many volumes with name {name}")
@@ -145,15 +145,6 @@ class DriveSelector:
         for drive in self._drives:
             for volume in VolumeDescriptor.find_all_in_drive(drive):
                 yield volume.drive, volume.name
-
-
-class FirstDriveSelector(DriveSelector):
-    @property
-    def _first_drive(self):
-        return self._drives[0]
-
-    def select_drive_for_new_volume(self, name: str, **opts) -> pathlib.Path:
-        return self._first_drive
 
 
 class SelectedDriveSelector(DriveSelector):
@@ -201,7 +192,7 @@ class LowestPercentageAvailableDriveSelector(SpaceDriveSelector):
         return min(self._drives, key=drive_percentage)
 
 
-def create_volume(drive: pathlib.Path, name: str, mod: int = 0o777) -> pathlib.Path:
+def create_volume(drive: pathlib.Path, name: str, mod: int = 0o777) -> pathlib.Path | None:
     collisions = list(VolumeDescriptor.find_all_with_name(drive, name))
     if collisions:
         return None
@@ -239,7 +230,7 @@ def unmount_volume(drive: pathlib.Path, name: str, id: str) -> bool:
         return False
 
 
-def get_data_dir_for_volume(drive: pathlib.Path, name: str) -> pathlib.Path:
+def get_data_dir_for_volume(drive: pathlib.Path, name: str) -> pathlib.Path | None:
     try:
         return VolumeDescriptor.find_one_with_name(drive, name).data_dir
     except KeyError:
