@@ -18,16 +18,18 @@ class NFSFilesystem:
     def __post_init__(self):
         self.options = self.options or set()
 
+    """
+    init an NFSFilesystem object from a string
+    :param str string: '\<server>:\<remote_path> \<options>(option)' format
+    """
+
+    @classmethod
+    def sanitize_path(cls, s: str):
+        forbidden_chars = '/:\\;'
+        return ''.join('_' if c in forbidden_chars else c for c in s)
+
     @classmethod
     def parse(cls, string: str) -> 'NFSFilesystem':
-        """
-        init an NFSFilesystem object from a string
-        :param str string: '\<server>:\<remote_path> \<options>(option)' format
-        """
-
-        def sanitize_string(s: str):
-            forbidden_chars = '/'
-            return ''.join('_' if c in forbidden_chars else c for c in s)
 
         parts = string.split()
         assert len(parts) in {1, 2}, f"Invalid NFS mount point string: {string}"
@@ -38,7 +40,7 @@ class NFSFilesystem:
         server = server.strip()
         remote_path = pathlib.Path(remote_path.strip())
 
-        local_path = pathlib.Path(ROOT / str(sanitize_string(parts[0])))
+        local_path = pathlib.Path(ROOT / str(cls.sanitize_path(parts[0])))
 
         return cls(server, remote_path, local_path, options)
 

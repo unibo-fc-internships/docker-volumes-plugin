@@ -6,6 +6,7 @@ from plugin._log import logging
 import plugin.nfs as nfs
 import uuid
 import re
+from plugin.nfs import NFSFilesystem
 
 
 _REGEX_UUID = r"[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}"
@@ -159,7 +160,13 @@ class SelectedDriveSelector(DriveSelector):
     def select_drive_for_new_volume(self, name: str, drive: str = None, **opts) -> pathlib.Path:
         if drive is None:
             raise RuntimeError("No drive provided")
-        return pathlib.Path(ROOT / drive)
+
+        drive_path = NFSFilesystem.sanitize_path(drive)
+        for d in self._drives:
+            if str(d).removeprefix(str(ROOT) + '/').startswith(drive_path):
+                return d
+
+        raise RuntimeError(f"Drive {drive} not found")
 
 
 class SpaceDriveSelector(DriveSelector):

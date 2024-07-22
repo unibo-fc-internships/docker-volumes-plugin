@@ -306,7 +306,7 @@ class DriveSelectorsTest(BasePluginInstalledTest):
     def test_selected_drive_selector(self):
         for storage in docker_service.storages:
             self.volume = Faker().first_name()
-            self.create_volume(self.volume, drive_selector="selected", drive=f"{storage.name}:_").check_returncode()
+            self.create_volume(self.volume, drive_selector="selected", drive=f"{storage.name}:{storage.path}").check_returncode()
             ls = docker_service.exec("ls /data", storage.name)
             self.assertIn(self.volume, ls.stdout.decode('UTF-8'))
 
