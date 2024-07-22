@@ -122,7 +122,7 @@ class DockerService:
 
     def conf_plugin(self, mounts: string = None, plugin=PLUGIN):
         if mounts is None:
-            mounts = ";".join([str(storage) for storage in self.storages])
+            mounts = "|".join([str(storage) for storage in self.storages])
         return self.exec_all(f"docker plugin set {plugin} NFS_MOUNT='{mounts}'")
 
     def enable_plugin(self, plugin=PLUGIN):
