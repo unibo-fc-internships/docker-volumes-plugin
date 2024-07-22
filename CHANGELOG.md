@@ -1,3 +1,9 @@
+## [1.1.3](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.2...1.1.3) (2024-07-22)
+
+### Bug Fixes
+
+* **driveSelector:** new selectedDriveSelector ([f7cba8f](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/f7cba8fa4ad7da578a0eadd51b7e4152ab102baa))
+
 ## [1.1.2](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.1...1.1.2) (2024-07-19)
 
 ### Dependency updates
