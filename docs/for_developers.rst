@@ -32,7 +32,7 @@ Setting up the development environment
 - PLUGIN_TAG: The tag of the plugin
 
 .. note::
-    Plugin will be publish on dockerhub with the name ``PLUGIN_NAME``, make sure you're allowed to publish it (mandatory for tests).
+    Plugin will be published on dockerhub with the name ``PLUGIN_NAME``, make sure you're allowed to publish it (mandatory for tests).
 
 3. Connect to dockerhub:
 

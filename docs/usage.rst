@@ -43,7 +43,7 @@ To use the plugin, you can create a volume with the following command:
 With ``drive_selector`` option you can specify how to choose the server that will host your volume.
 
 .. note::
-    Default drive selector is ``selected``.
+    Default drive selector is ``highest_space``.
 
 There are different strategies to choose the server:
 
