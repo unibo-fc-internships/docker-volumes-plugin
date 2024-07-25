@@ -36,7 +36,7 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
         run: |
           docker login -u francoisjn -p $DOCKER_PASSWORD
-          make publish PLUGIN_TAG=test
+          make publish PLUGIN_TAG=test-${{ github.run_id }}-${{ github.run_number }}
 
       - name: Run Tests
         run: |
