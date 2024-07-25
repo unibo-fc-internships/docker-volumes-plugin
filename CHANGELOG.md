@@ -1,3 +1,17 @@
+## [1.1.6](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.5...1.1.6) (2024-07-25)
+
+### Dependency updates
+
+* **deps:** update dependency alabaster to v0.7.16 ([4db1754](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/4db1754acd0956c14722ee0820e17b9ca09880e6))
+* **deps:** update dependency certifi to v2022.6.15.2 ([dcacd54](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/dcacd545d200e13b52dcd02a89c9c64cc364c011))
+* **deps:** update dependency charset-normalizer to v2.1.1 ([db10767](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/db10767a6c1f0222d2a25f28861178f49a0ca091))
+* **deps:** update dependency jinja2 to v3.1.4 ([94df341](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/94df34168b2470fb598db22cda8e8e3ad020143f))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.92 ([265ce96](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/265ce967362b8f0bf3bcba7cbd132b84a54a45fb))
+
+### Bug Fixes
+
+* workflow publish unique tests ([78e648b](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/78e648bb2c87436bf73ce24d318d1e5532108961))
+
 ## [1.1.5](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.4...1.1.5) (2024-07-22)
 
 ### Bug Fixes
