@@ -1,3 +1,12 @@
+## [1.1.7](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.6...1.1.7) (2024-07-25)
+
+### Bug Fixes
+
+* delete workflow unique tests ([4f3d20d](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/4f3d20db6a72247cd20dbbbb08119e0f9e83cc3e))
+* test workflow overflow resolved ([cc8e5be](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/cc8e5be4b2db724652de0c0fc900a8101aa1dee8))
+* typo ([5de611e](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/5de611e70fcc82beca2d6df6e527d07319f02ffb))
+* workflows rights ([ad2fd3d](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/ad2fd3d26b9afdeb5213b99c6018c4bde0d1397f))
+
 ## [1.1.6](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.5...1.1.6) (2024-07-25)
 
 ### Dependency updates
