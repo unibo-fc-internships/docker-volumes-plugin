@@ -1,17 +1,11 @@
 name: CI/CD
 on:
-  push:
-    branches-ignore:
-      - 'dependabot/**'
-    paths-ignore:
-      - '.gitignore'
-      - '.mergify.yml'
-      - 'CHANGELOG.md'
-      - 'LICENSE'
-      - 'README.md'
-      - 'renovate.json'
-  pull_request:
+  workflow_call:
   workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}
+    cancel-in-progress: ${{ !contains(github.ref, 'main') }}
 permissions:
   contents: write
   issues: write
@@ -36,7 +30,7 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
         run: |
           docker login -u francoisjn -p $DOCKER_PASSWORD
-          make publish PLUGIN_TAG=test-${{ github.run_id }}-${{ github.run_number }}
+          make publish PLUGIN_TAG=test
 
       - name: Run Tests
         run: |
@@ -50,7 +44,7 @@ jobs:
         env:
           API_TOKEN: ${{ secrets.DOCKER_HUB_API_TOKEN }}
         run: |
-          make unpublish API_TOKEN=$API_TOKEN PLUGIN_TAG=test-${{ github.run_id }}-${{ github.run_number }}
+          make unpublish API_TOKEN=$API_TOKEN
   deploy:
     if: github.ref_name == 'master' || github.ref_name == 'main'
     name: Deploy
