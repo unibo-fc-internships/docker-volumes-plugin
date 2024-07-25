@@ -64,8 +64,8 @@ push:
 	@echo "### push plugin ${PLUGIN_NAME}:${PLUGIN_TAG}"
 	@docker plugin push ${PLUGIN_NAME}:${PLUGIN_TAG}
 
-delete_test:
-	@curl -H "Authorization: JWT ${API_TOKEN}" -X DELETE https://hub.docker.com/v2/repositories/${PLUGIN_NAME}/tags/test/
+unpublish:
+	@curl -H "Authorization: JWT ${API_TOKEN}" -X DELETE https://hub.docker.com/v2/repositories/${PLUGIN_NAME}/tags/${PLUGIN_TAG}/
 
 test:
 	@echo "### test plugin ${PLUGIN_NAME}:${PLUGIN_TAG}"
