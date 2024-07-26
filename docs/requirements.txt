@@ -28,7 +28,7 @@ packaging==24.1
     # via sphinx
 pygments==2.12.0
     # via sphinx
-pyparsing==3.0.9
+pyparsing==3.1.2
     # via packaging
 pytz==2024.1
     # via babel
