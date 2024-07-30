@@ -1,3 +1,50 @@
+## [1.1.8](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.7...1.1.8) (2024-07-30)
+
+### Dependency updates
+
+* **deps:** rollback alabastor to 0.7.14 ([37863c3](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/37863c387a0fe26bd5c2ca64da5d3bfb1d0a1620))
+* **deps:** rollback sphinx to 7.4.7 ([0c14c24](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/0c14c246532bed55543243bda678e6eb9f764aea))
+* **deps:** update dependency alabaster to v1 ([0c07683](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/0c07683c37876f4cfcf45bf451011883bc389d23))
+* **deps:** update dependency babel to v2.15.0 ([ce9829f](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/ce9829faddf0a6a7e652e8eefa1644ceceeec450))
+* **deps:** update dependency certifi to v2023 ([#51](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/51)) ([0744709](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/0744709cb883c7e0e087d977bfd037c3bdcf0615))
+* **deps:** update dependency certifi to v2024 ([#52](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/52)) ([7b92420](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/7b92420b9576d60eb6dd2864ad7505d29e4574aa))
+* **deps:** update dependency charset-normalizer to v3 ([#53](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/53)) ([7c0eafe](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/7c0eafe8b06e9a0e597868e756bedaf4e53025fc))
+* **deps:** update dependency docutils to v0.21.2 ([6d1491d](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/6d1491d39e14da589bb8f2fdd0169420900597db))
+* **deps:** update dependency idna to v3.7 ([24dda49](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/24dda4986324d90b91e76497eee3aed75525033e))
+* **deps:** update dependency markupsafe to v2.1.5 ([608d872](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/608d872869e9522c912047c028c9d17f00bb371f))
+* **deps:** update dependency packaging to v23 ([43971dc](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/43971dc96ada5508ab7f387f2b4df155d58d9b69))
+* **deps:** update dependency packaging to v24 ([#56](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/56)) ([e0af9ec](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/e0af9ec77674a381abee2d87591646009c2126dd))
+* **deps:** update dependency pygments to v2.18.0 ([4a9ec22](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/4a9ec225f5900a984ce5639b0c6ae880ba23d37a))
+* **deps:** update dependency pyparsing to v3.1.2 ([a274455](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/a2744550d5740374397cb370322e2cf77e910c3d))
+* **deps:** update dependency pytz to v2023 ([17adfb4](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/17adfb4c801660e72aa7078be5ee94bdd3ab6f9c))
+* **deps:** update dependency pytz to v2024 ([#58](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/58)) ([08f5cbe](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/08f5cbe2db199cb2258a94f69b1acc52cb334ff4))
+* **deps:** update dependency requests to v2.32.3 ([29d027f](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/29d027fc311bb5f0ed2eed5947ed0ce252cf8f61))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.93 ([44f6fd3](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/44f6fd31670434edbff045243992eef44abc5183))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.94 ([ffd5295](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/ffd52955d1c1fa36590ad993f407ca907fb28739))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.95 ([#66](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/66)) ([bc7a8d6](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/bc7a8d6cc9ca186cc007f51f80fd1845b75148cd))
+* **deps:** update dependency sphinx to v6 ([f7cbcca](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/f7cbccaa499d6cfbdc5406dcf145bd890715a621))
+* **deps:** update dependency sphinx to v7 ([#60](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/60)) ([caaf7d9](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/caaf7d961aaffbfb09cc5819c2ae60237a87d546))
+* **deps:** update dependency sphinx to v8 ([9902d96](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/9902d969fdcc33fe9e0eaee0bcb3da16fee61eb7))
+* **deps:** update dependency sphinx to v8.0.2 ([#73](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/73)) ([8f4cd55](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/8f4cd556554eb24f1a673e42d6d97d277f7369e5))
+* **deps:** update dependency sphinx-rtd-theme to v2 ([06ec942](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/06ec94243e78a5d26a0abdfa65841ea3a2a784ab))
+* **deps:** update dependency sphinxcontrib-applehelp to v1.0.8 ([13becf8](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/13becf88980bd7da8781bb50fb3cba1a2d218809))
+* **deps:** update dependency sphinxcontrib-applehelp to v2 ([454b948](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/454b9483e37abef0052c0e9f9599d697eb31741d))
+* **deps:** update dependency sphinxcontrib-devhelp to v1.0.6 ([453f32d](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/453f32dde27d83c1eda94a49befda418059be78e))
+* **deps:** update dependency sphinxcontrib-devhelp to v2 ([#69](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/69)) ([3aee498](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/3aee498fced2227e8b296b36c9969d9d48a5f29e))
+* **deps:** update dependency sphinxcontrib-htmlhelp to v2.0.6 ([af7b4d3](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/af7b4d32f84d831cff1440afb44be2be25103ec5))
+* **deps:** update dependency sphinxcontrib-htmlhelp to v2.1.0 ([#67](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/67)) ([694ffed](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/694ffeda3aebab2eba3d27aaa35810d08429ddf2))
+* **deps:** update dependency sphinxcontrib-qthelp to v1.0.8 ([5b56ff3](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/5b56ff3b19b83d3250a610c241aae4e4de10fd35))
+* **deps:** update dependency sphinxcontrib-qthelp to v2 ([#70](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/70)) ([c6580bc](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/c6580bce0586ad7cb6d04c74820f086bfd6e08a7))
+* **deps:** update dependency sphinxcontrib-serializinghtml to v1.1.10 ([0457ab9](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/0457ab9c8836b2c07d4f984969f0fef05aaec79a))
+* **deps:** update dependency sphinxcontrib-serializinghtml to v2 ([#71](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/71)) ([c3feb26](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/c3feb263f69fa5228ae0996452f1ac00603cdbd7))
+* **deps:** update dependency urllib3 to v2 ([e3b946c](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/e3b946ce0e682a0a0fd9f016bd6df76d5fa5cf2e))
+* **deps:** update docker docker tag to v27.1.1 ([#27](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/27)) ([cf55b30](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/cf55b30996dd93124e9eb23c08de8e0e7a45d978))
+* **deps:** update node.js to 20.16 ([#50](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/50)) ([01a9c68](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/01a9c681e42c348c7b5567291b30d34aa9ccc5c3))
+
+### Bug Fixes
+
+* **deps:** readthedocs removed from renovate ([#77](https://github.com/unibo-fc-internships/docker-volumes-plugin/issues/77)) ([b36445e](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/b36445e027370cfab2103d62c969fc4287750c1d))
+
 ## [1.1.7](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.6...1.1.7) (2024-07-25)
 
 ### Bug Fixes
