@@ -14,7 +14,8 @@
   },
   "includeForks": true,
   "ignorePaths": [
-    ".python-version"
+    ".python-version",
+    "docs/*"
   ],
   "packageRules": [
     {
