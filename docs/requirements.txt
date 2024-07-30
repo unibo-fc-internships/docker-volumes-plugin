@@ -4,7 +4,7 @@
 #
 #    pip-compile docs/requirements.in
 #
-alabaster==0.7.14
+alabaster==0.7.16
     # via sphinx
 babel==2.15.0
     # via sphinx
