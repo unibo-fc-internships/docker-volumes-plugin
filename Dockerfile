@@ -8,6 +8,6 @@ WORKDIR /$PLUGIN_NAME_SHORT
 RUN pip install -r requirements.txt
 COPY . /$PLUGIN_NAME_SHORT/
 RUN mkdir -p /run/docker/plugins
-RUN apt-get update && apt-get install -y nfs-common
+RUN apt-get update && apt-get install -y nfs-common docker.io
 ENTRYPOINT /usr/bin/bash /$PLUGIN_NAME_SHORT/entrypoint.sh
 CMD /usr/local/bin/python -m flask --app plugin.service run --host=unix:///run/docker/plugins/$PLUGIN_NAME_SHORT.sock

@@ -79,14 +79,14 @@ class VolumeDescriptor:
         name = name.replace(".lock", "")
         return name
 
-    def mount(self, container_id: str) -> pathlib.Path:
+    def mount(self, container_id: str) -> pathlib.Path | None:
         lock = self.lock_file(container_id)
         if lock.exists():
             return None
         lock.touch(exist_ok=False)
         return lock
 
-    def unmount(self, container_id: str) -> pathlib.Path:
+    def unmount(self, container_id: str) -> pathlib.Path | None:
         lock = self.lock_file(container_id)
         if not lock.exists():
             return None

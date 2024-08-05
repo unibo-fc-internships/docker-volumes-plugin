@@ -1,5 +1,5 @@
 {
-  "description": "Docker plugin for storing volumes on custom paths",
+  "description": "Docker plugin for storing volumes on NFS server",
   "documentation": "https://example.com/docker/plugin",
   "workdir": "/nfs-volumes",
   "entrypoint": [
@@ -24,13 +24,22 @@
   },
   "mounts": [
     {
-        "destination": "/var/log/",
-        "source": "/var/log/",
-        "type": "bind",
-        "options": [
-            "bind",
-            "rw"
-        ]
+      "destination": "/var/log/",
+      "source": "/var/log/",
+      "type": "bind",
+      "options": [
+        "bind",
+        "rw"
+      ]
+    },
+    {
+      "destination": "/var/run/docker.sock",
+      "source": "/var/run/docker.sock",
+      "type": "bind",
+      "options": [
+        "bind",
+        "rw"
+      ]
     }
   ],
   "env": [
