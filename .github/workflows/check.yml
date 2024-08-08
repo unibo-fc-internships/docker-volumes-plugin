@@ -44,7 +44,7 @@ jobs:
         env:
           API_TOKEN: ${{ secrets.DOCKER_HUB_API_TOKEN }}
         run: |
-          make unpublish API_TOKEN=$API_TOKEN
+          make unpublish API_TOKEN=$API_TOKEN PLUGIN_TAG=test
   deploy:
     if: github.ref_name == 'master' || github.ref_name == 'main'
     name: Deploy
