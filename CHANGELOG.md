@@ -1,3 +1,16 @@
+## [1.1.9](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.8...1.1.9) (2024-08-08)
+
+### Dependency updates
+
+* **deps:** update dependency faker to v26.1.0 ([4d8ede0](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/4d8ede0d67eec01ea61365855d8243e2dc74b2c9))
+* **deps:** update dependency faker to v26.2.0 ([3c30610](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/3c30610246ae2c6f38caebd41d0ef4dfd9479596))
+* **deps:** update dependency pyyaml to v6.0.2 ([8791653](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/87916536a062f4cb8246547987b2f544057e45f9))
+* **deps:** update python docker tag to v3.12.5 ([1ac324f](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/1ac324f855b9840d05fa5ffc8d869a7837373cc7))
+
+### Bug Fixes
+
+* workflow test will remove test not latest ([ad8593a](https://github.com/unibo-fc-internships/docker-volumes-plugin/commit/ad8593a914ad9e85f793d71433dd81cced2b1814))
+
 ## [1.1.8](https://github.com/unibo-fc-internships/docker-volumes-plugin/compare/1.1.7...1.1.8) (2024-07-30)
 
 ### Dependency updates
