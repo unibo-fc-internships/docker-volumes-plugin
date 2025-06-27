@@ -27,7 +27,7 @@ services:
 
   docker1:
     privileged: true
-    image: docker:28.2.2-dind
+    image: docker:28.3.0-dind
     volumes:
       - ./logs/docker1:/var/log/
     networks:
@@ -41,7 +41,7 @@ services:
 
   docker2:
     privileged: true
-    image: docker:28.2.2-dind
+    image: docker:28.3.0-dind
     volumes:
       - ./logs/docker2:/var/log/
     networks:
