@@ -27,7 +27,7 @@ jobs:
         id: get-node-version
         run: echo "::set-output name=node-version::$(node -v)"
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
 
